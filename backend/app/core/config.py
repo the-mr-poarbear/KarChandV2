@@ -9,6 +9,9 @@ class Settings(BaseSettings):
     GOOGLE_API_KEY: str
     LLM_PROVIDER: str
     KARLANCER_TOKEN:str
+    PONISHA_CATEGORIES_URL:str
+    PONISHA_SEARCH_URL:str
+    PONISHA_API_URL:str
     
     # Optional with default
     DATABASE_URL: str = "sqlite:///./app.db"

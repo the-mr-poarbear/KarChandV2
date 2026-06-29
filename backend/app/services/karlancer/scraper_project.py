@@ -145,8 +145,9 @@ class ProjectScraperService:
         id before calling their API, since that's what their endpoint expects.
 
         update_existing: if False (default), projects already in the table
-        (matched by scraped_project_id) are skipped without calling the detail
-        endpoint at all. If True, they're re-fetched and overwritten.
+        (matched by scraped_project_id + category_id) are skipped without
+        calling the detail endpoint at all. If True, they're re-fetched and
+        overwritten.
         """
         result = {
             "status": "success",
@@ -192,7 +193,11 @@ class ProjectScraperService:
             for proj in projects:
                 try:
                     result["projects_found"] += 1
-                    outcome = self._process_project(proj, update_existing=update_existing)
+                    # category.id (the internal UUID) is known upfront here, since
+                    # this freelancer/category pairing already tells us which
+                    # category these projects belong to — no need to wait for the
+                    # detail response to learn it.
+                    outcome = self._process_project(proj, category.id, update_existing=update_existing)
                     if outcome == "added":
                         result["projects_added"] += 1
                     elif outcome == "updated":
@@ -201,6 +206,7 @@ class ProjectScraperService:
                         result["projects_skipped"] += 1
 
                 except Exception as e:
+                    self.db.rollback()  # clear any failed transaction so the next project isn't blocked
                     result["errors"].append({
                         "project_id": proj.get("project_id", proj.get("id", "unknown")),
                         "error": str(e),
@@ -218,10 +224,11 @@ class ProjectScraperService:
                 break
             page += 1
 
-        self.db.commit()
         return result
 
-    def _process_project(self, completed_project_entry: dict, update_existing: bool = False) -> str:
+    def _process_project(
+        self, completed_project_entry: dict, internal_category_id: str, update_existing: bool = False
+    ) -> str:
         """
         Given one entry from the completed-projects list, fetch full detail
         and upsert the Project row + its skills.
@@ -230,6 +237,12 @@ class ProjectScraperService:
         False, existence is checked using the id already present on the
         completed-projects entry — BEFORE calling the detail endpoint — so
         already-scraped projects cost zero extra HTTP requests.
+
+        internal_category_id is YOUR Category.id (UUID), already known from
+        the freelancer/category pairing this project came from. Used to scope
+        the (scraped_project_id, category_id) lookup, matching the composite
+        unique constraint on Project — a raw scraped_project_id alone is not
+        guaranteed unique across categories from different organizations.
         """
         entry_title = completed_project_entry.get("title", "Untitled")
         entry_project_id = str(completed_project_entry.get("project_id") or completed_project_entry.get("id") or "")
@@ -237,11 +250,7 @@ class ProjectScraperService:
         print(f"📦 Fetching: {entry_title}")
 
         if not update_existing and entry_project_id:
-            already_exists = (
-                self.db.query(Project.id)
-                .filter(Project.scraped_project_id == entry_project_id)
-                .first()
-            )
+            already_exists = self._find_existing_project(entry_project_id, internal_category_id)
             if already_exists:
                 print(f"   ⏭️  Skipped (already exists): {entry_title}")
                 return "skipped"
@@ -256,25 +265,46 @@ class ProjectScraperService:
         detail = self._fetch_project_detail(slug_id)
         print(f"   ✅ Fetched detail: {detail.get('title', entry_title)}")
 
-        existing = self.db.query(Project).filter(Project.scraped_project_id == str(detail["id"])).first()
+        detail_project_id = str(detail["id"])
+        existing = self._find_existing_project(detail_project_id, internal_category_id)
 
         if existing:
             if not update_existing:
                 # Edge case: entry_project_id didn't match but the detail-confirmed id does.
                 # Treat consistently with the "skip, don't touch" contract.
                 return "skipped"
-            self._update_project_fields(existing, detail, final_budget)
+            self._update_project_fields(existing, detail, internal_category_id, final_budget)
             self._sync_project_skills(existing, detail.get("skills", []))
             return "updated"
         else:
-            new_project = Project(scraped_project_id=str(detail["id"]))
-            self._update_project_fields(new_project, detail, final_budget)
+            new_project = Project(scraped_project_id=detail_project_id)
+            self._update_project_fields(new_project, detail, internal_category_id, final_budget)
             self.db.add(new_project)
             self.db.flush()  # get new_project.id before linking skills
             self._sync_project_skills(new_project, detail.get("skills", []))
             return "added"
 
-    def _update_project_fields(self, project: Project, detail: dict, final_budget) -> None:
+    def _find_existing_project(self, scraped_project_id: str, internal_category_id: str) -> Project | None:
+        """
+        Looks up a Project by (scraped_project_id, category_id) — matching the
+        composite unique constraint on the Project table. A raw id alone is
+        NOT enough: two different categories (including across different
+        organizations) could coincidentally share the same scraped_project_id,
+        but a project never changes category once created, so category_id is
+        a safe, permanent scoping key.
+        """
+        return (
+            self.db.query(Project)
+            .filter(
+                Project.scraped_project_id == scraped_project_id,
+                Project.category_id == internal_category_id,
+            )
+            .first()
+        )
+
+    def _update_project_fields(
+        self, project: Project, detail: dict, internal_category_id: str, final_budget
+    ) -> None:
         project.title = detail.get("title")
         project.description = detail.get("description")
         project.outer_link = detail.get("url")
@@ -283,33 +313,21 @@ class ProjectScraperService:
         project.budget_max = detail.get("max_budget")
         project.final_budget = final_budget
         project.scraped_date_created = detail.get("created_at")
-
-        scraped_category_id = detail.get("category_id")
-        if scraped_category_id:
-            category = (
-                self.db.query(Category)
-                .filter(Category.scraped_id == str(scraped_category_id))
-                .first()
-            )
-            if not category:
-                raise ValueError(
-                    f"Project detail references category scraped_id={scraped_category_id}, "
-                    f"but no matching Category row exists. Run the category scraper first."
-                )
-            project.category_id = category.id
-        else:
-            project.category_id = None
+        # category_id is already known from the freelancer/category pairing
+        # that produced this project — no need to re-resolve it from the
+        # detail response's own category_id field.
+        project.category_id = internal_category_id
 
     def _sync_project_skills(self, project: Project, skills: list) -> None:
         """Upsert each skill from the project detail, link it to the project if not already linked."""
         # Get organization_id from project's category
         # Make sure project.category is loaded (use joinedload if needed)
         organization_id = project.category.organization_id if project.category else None
-        
+
         if not organization_id:
             # Handle case where category or organization_id is missing
             raise ValueError(f"Project {project.id} has no organization associated")
-        
+
         for sk in skills:
             scraped_skill_id = sk.get("id")
             name = sk.get("name") or sk.get("display")
@@ -317,9 +335,9 @@ class ProjectScraperService:
                 continue
 
             skill_data = SkillCreate(
-                scraped_id=str(scraped_skill_id), 
-                name=name, 
-                organization_id=organization_id  # Now using the organization_id
+                scraped_id=str(scraped_skill_id),
+                name=name,
+                organization_id=organization_id,  # Now using the organization_id
             )
             skill_obj = skill_crud.create_or_update_skill(self.db, skill_data)
 
@@ -330,7 +348,7 @@ class ProjectScraperService:
             )
             if not already_linked:
                 self.db.add(ProjectSkill(project_id=project.id, skill_id=skill_obj.id))
-                
+
     @staticmethod
     def _extract_slug_id(url: str) -> str | None:
         """The id is always the last '-'-separated segment of the slug."""
@@ -348,7 +366,7 @@ class ProjectScraperService:
         try:
             response = httpx.get(url, params=params, timeout=10)
         except httpx.TimeoutException:
-            self.rate_limiter.report_failure(source="completed-projects")
+            print(f"⏱️  Timeout fetching completed projects for user {scraped_user_id}, page {page}")
             raise
 
         if response.status_code in (429, 403):
@@ -369,7 +387,7 @@ class ProjectScraperService:
         try:
             response = httpx.get(url, timeout=10, headers=headers)
         except httpx.TimeoutException:
-            self.rate_limiter.report_failure(source="project-detail")
+            print(f"⏱️  Timeout fetching project detail for slug {slug_id}")
             raise
 
         if response.status_code in (429, 403):

@@ -3,14 +3,14 @@ from fastapi import APIRouter, Depends, BackgroundTasks , HTTPException
 from sqlalchemy.orm import Session
 
 from app.core.database import SessionLocal, get_db
-from app.services.scraper_categories import ScraperService
+from app.services.karlancer.scraper_categories import ScraperService
 from pydantic import BaseModel
-from app.services.scraper_freelancer import FreelancerScraperService
-from app.services.scraper_project import ProjectScraperService
+from app.services.karlancer.scraper_freelancer import FreelancerScraperService
+from app.services.karlancer.scraper_project import ProjectScraperService
 from app.crud import organization as organization_crud
-from app.schemas.organization import OrganizationName
+from app.services.karlancer.scraper_skills import SkillScraperService
 
-router = APIRouter(prefix="/scraper", tags=["scraper"])
+router = APIRouter(prefix="/karlancer-scraper", tags=["karlancer scraper"])
 
 
 def run_scrape(db: Session):
@@ -33,10 +33,7 @@ def run_scrape(db: Session):
 #     return {"status": "started", "message": "Scraping job triggered in background"}
 
 
-
-
-
-@router.post("/run-sync")
+@router.post("/category")
 def trigger_scrape_sync(
     db: Session = Depends(get_db),
 ):
@@ -127,3 +124,8 @@ def scrape_all_freelancer_projects(
         resume=resume,
         offset=offset,
     )
+
+@router.post("/skills")
+def trigger_skill_scrape(db: Session = Depends(get_db)):
+    service = SkillScraperService(db)
+    return service.scrape_and_update()

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, DateTime, Text, ForeignKey, Integer, Float, Index
+from sqlalchemy import Column, String, DateTime, Text, ForeignKey, Integer, Float, Index , UniqueConstraint
 from sqlalchemy.orm import relationship
 from datetime import datetime
 import uuid
@@ -20,7 +20,7 @@ class Project(Base):
     final_budget = Column(Float, nullable=True)
     
     # External ID from Karlancer
-    scraped_project_id = Column(String, unique=True, nullable=False, index=True)
+    scraped_project_id = Column(String, nullable=False, index=True)
     scraped_date_created = Column(DateTime, nullable=True)
     
     # Foreign Key to Category (set null on delete)
@@ -37,4 +37,5 @@ class Project(Base):
     # Optional: Composite index for common queries
     __table_args__ = (
         Index('idx_projects_category_budget', 'category_id', 'budget_min', 'budget_max'),
+        UniqueConstraint('scraped_project_id', 'category_id', name='uq_project_scraped_id_category'),
     )
