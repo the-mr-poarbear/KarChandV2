@@ -1,0 +1,946 @@
+[
+  {
+    "feature_name": "Rate Limiting and Activity Monitoring",
+    "category": "Security"
+  },
+  {
+    "feature_name": "Captcha Integration",
+    "category": "Security"
+  },
+  {
+    "feature_name": "RESTful API",
+    "category": "Integration"
+  },
+  {
+    "feature_name": "Shipping Carrier API Integration",
+    "category": "Integration"
+  },
+  {
+    "feature_name": "Payment Gateway Integration",
+    "category": "Financial"
+  },
+  {
+    "feature_name": "Tax Compliance and Invoice API Integration",
+    "category": "Financial"
+  },
+  {
+    "feature_name": "Shopping Cart and Checkout",
+    "category": "E-commerce"
+  },
+  {
+    "feature_name": "Coupon and Discount Management",
+    "category": "E-commerce"
+  },
+  {
+    "feature_name": "Shipping Configuration",
+    "category": "E-commerce"
+  },
+  {
+    "feature_name": "Order Tracking and Status Management",
+    "category": "E-commerce"
+  },
+  {
+    "feature_name": "Dynamic Pricing",
+    "category": "E-commerce"
+  },
+  {
+    "feature_name": "Price Aggregation Engine",
+    "category": "E-commerce"
+  },
+  {
+    "feature_name": "Product Recommendation Engine",
+    "category": "E-commerce"
+  },
+  {
+    "feature_name": "Admin Panel and Dashboard",
+    "category": "Administration"
+  },
+  {
+    "feature_name": "Plugin and Extension Architecture",
+    "category": "Architecture"
+  },
+  {
+    "feature_name": "Frontend-backend Decoupling",
+    "category": "Architecture"
+  },
+  {
+    "feature_name": "Content Management System",
+    "category": "Content Management"
+  },
+  {
+    "feature_name": "Report Generation and Export",
+    "category": "Reporting"
+  },
+  {
+    "feature_name": "File Upload and Storage",
+    "category": "Storage"
+  },
+  {
+    "feature_name": "Search and Filtering",
+    "category": "Search"
+  },
+  {
+    "feature_name": "Bulk Operations and Batch Processing",
+    "category": "Data Processing"
+  },
+  {
+    "feature_name": "Structured Data Mapping and Transformation",
+    "category": "Data Processing"
+  },
+  {
+    "feature_name": "Media Download and Processing",
+    "category": "Media"
+  },
+  {
+    "feature_name": "Image Processing",
+    "category": "Media"
+  },
+  {
+    "feature_name": "Barcode/QR Code Scanning",
+    "category": "Data Capture"
+  },
+  {
+    "feature_name": "Geolocation Processing",
+    "category": "Geospatial"
+  },
+  {
+    "feature_name": "Interactive Map Integration",
+    "category": "Geospatial"
+  },
+  {
+    "feature_name": "SMS Notification Services",
+    "category": "Communication"
+  },
+  {
+    "feature_name": "Newsletter Management",
+    "category": "Communication"
+  },
+  {
+    "feature_name": "Online Chat System",
+    "category": "Communication"
+  },
+  {
+    "feature_name": "Comment and Discussion System",
+    "category": "Communication"
+  },
+  {
+    "feature_name": "Social Networking Features",
+    "category": "Social"
+  },
+  {
+    "feature_name": "Delivery Time Slot Scheduling",
+    "category": "Scheduling"
+  },
+  {
+    "feature_name": "Scheduled Task Automation",
+    "category": "Automation"
+  },
+  {
+    "feature_name": "Browser Extension",
+    "category": "Automation"
+  },
+  {
+    "feature_name": "Quiz and Assessment System",
+    "category": "Education"
+  },
+  {
+    "feature_name": "Error Monitoring and Logging",
+    "category": "Monitoring"
+  },
+  {
+    "feature_name": "Technical SEO Management",
+    "category": "SEO"
+  },
+  {
+    "feature_name": "Localization and Internationalization",
+    "category": "Localization"
+  },
+  {
+    "feature_name": "Network Failover and Aggregation",
+    "category": "Networking"
+  },
+  {
+    "feature_name": "Proxy and IP Rotation",
+    "category": "Networking"
+  },
+  {
+    "feature_name": "Thermal Printer Integration",
+    "category": "Hardware Integration"
+  },
+  {
+    "feature_name": "Property Rental and Booking Platform",
+    "category": "Real Estate"
+  },
+  {
+    "feature_name": "Podcast Content Management",
+    "category": "Content Management"
+  },
+  {
+    "feature_name": "Warranty Validation System",
+    "category": "Product Management"
+  },
+  {
+    "feature_name": "Mobile Device Activation Management",
+    "category": "Device Management"
+  },
+  {
+    "feature_name": "Badge and Reward System",
+    "category": "Gamification"
+  },
+  {
+    "feature_name": "Mathematical Calculation Engine",
+    "category": "Processing"
+  },
+  {
+    "feature_name": "Financial Calculation Engine",
+    "category": "Financial"
+  },
+  {
+    "feature_name": "Multi-bank Transaction Tracking",
+    "category": "Financial"
+  },
+  {
+    "feature_name": "Profit and Loss Tracking",
+    "category": "Financial"
+  },
+  {
+    "feature_name": "Currency Conversion",
+    "category": "Financial"
+  },
+  {
+    "feature_name": "Code Quality Analysis",
+    "category": "Development Tools"
+  },
+  {
+    "feature_name": "Malware Detection and Removal",
+    "category": "Security"
+  },
+  {
+    "feature_name": "Server-Side Rendering (SSR) for SEO Optimization",
+    "category": "Performance"
+  },
+  {
+    "feature_name": "Dynamic Form Field Generation",
+    "category": "User Input"
+  },
+  {
+    "feature_name": "Anonymous User Data Handling",
+    "category": "Privacy"
+  },
+  {
+    "feature_name": "Web-to-Native App Conversion (WebView)",
+    "category": "Mobile"
+  },
+  {
+    "feature_name": "Conditional Link Handling in WebView",
+    "category": "Mobile"
+  },
+  {
+    "feature_name": "Educational Content Subscription Management",
+    "category": "Monetization"
+  },
+  {
+    "feature_name": "Mobile App Deep Linking",
+    "category": "Mobile"
+  },
+  {
+    "feature_name": "Educational Video Content Delivery and Streaming",
+    "category": "Media"
+  },
+  {
+    "feature_name": "Multi-vendor Marketplace Support",
+    "category": "E-commerce"
+  },
+  {
+    "feature_name": "Online Assessment and Exam Engine",
+    "category": "Education"
+  },
+  {
+    "feature_name": "Performance Profiling and Optimization",
+    "category": "Performance"
+  },
+  {
+    "feature_name": "Database Cleanup and Optimization",
+    "category": "Data Management"
+  },
+  {
+    "feature_name": "Security Hardening and Vulnerability Scanning",
+    "category": "Security"
+  },
+  {
+    "feature_name": "Domain Aliasing and URL Redirection",
+    "category": "Networking"
+  },
+  {
+    "feature_name": "Peer-to-peer File Transfer",
+    "category": "Data Transfer"
+  },
+  {
+    "feature_name": "User Financial Balance Management",
+    "category": "Financial"
+  },
+  {
+    "feature_name": "User Profile Customization (Nicknames, Avatars)",
+    "category": "User Management"
+  },
+  {
+    "feature_name": "Request-Response Workflow Management",
+    "category": "Workflow Automation"
+  },
+  {
+    "feature_name": "Dynamic URL Tokenization and Expiry",
+    "category": "Security"
+  },
+  {
+    "feature_name": "Distance-based Pricing Engine",
+    "category": "E-commerce"
+  },
+  {
+    "feature_name": "Desktop Application for Database Querying",
+    "category": "Data Management"
+  },
+  {
+    "feature_name": "Self-hosted Team Collaboration Platform Integration",
+    "category": "Integration"
+  },
+  {
+    "feature_name": "Automated Form Data Population from CRM",
+    "category": "Integration"
+  },
+  {
+    "feature_name": "Advertisement Distribution and Performance Tracking",
+    "category": "Advertising"
+  },
+  {
+    "feature_name": "Dynamic UI State Synchronization (Product Variants)",
+    "category": "User Interface"
+  },
+  {
+    "feature_name": "Cross-platform Mobile App Testing Framework",
+    "category": "Quality Assurance"
+  },
+  {
+    "feature_name": "Medical Test Ordering and Payment Workflow",
+    "category": "Healthcare"
+  },
+  {
+    "feature_name": "Database Query Optimization and Indexing",
+    "category": "Data Management"
+  },
+  {
+    "feature_name": "Offline Media Playback",
+    "category": "Media"
+  },
+  {
+    "feature_name": "Dark/Light Mode Switching",
+    "category": "User Interface"
+  },
+  {
+    "feature_name": "Image Segmentation and Object Detection",
+    "category": "Media"
+  },
+  {
+    "feature_name": "Synthetic Data Generation with GANs",
+    "category": "AI/ML"
+  },
+  {
+    "feature_name": "Search Engine Ranking Tracker",
+    "category": "SEO"
+  },
+  {
+    "feature_name": "Social Media Data Scraping and Extraction",
+    "category": "Data Processing"
+  },
+  {
+    "feature_name": "Automated App Store Search and Interaction",
+    "category": "Automation"
+  },
+  {
+    "feature_name": "3D Medical Image Segmentation",
+    "category": "AI/ML"
+  },
+  {
+    "feature_name": "3D Mechanical CAD File Generation",
+    "category": "CAD/Engineering"
+  },
+  {
+    "feature_name": "Hardware Device Data Capture (Scale/Weighbridge Integration)",
+    "category": "Hardware Integration"
+  },
+  {
+    "feature_name": "Voice Cloning and Synthesis with Deep Learning",
+    "category": "AI/ML"
+  },
+  {
+    "feature_name": "Text-to-Image Overlay and Watermarking",
+    "category": "Media"
+  },
+  {
+    "feature_name": "Diacritic and Unicode Character Normalization",
+    "category": "Data Processing"
+  },
+  {
+    "feature_name": "Countdown Timer with Dynamic UI Updates",
+    "category": "User Interface"
+  },
+  {
+    "feature_name": "Affiliate/Referral Commission Tracking",
+    "category": "Financial"
+  },
+  {
+    "feature_name": "Internal Transaction Ledger (Wallet System)",
+    "category": "Financial"
+  },
+  {
+    "feature_name": "Polar Plot and Custom Grid Visualization",
+    "category": "Data Visualization"
+  },
+  {
+    "feature_name": "In-app Purchase Integration",
+    "category": "Monetization"
+  },
+  {
+    "feature_name": "Multi-payment Gateway Routing",
+    "category": "Financial"
+  },
+  {
+    "feature_name": "Scientific Simulation and Validation Engine",
+    "category": "Scientific Computing"
+  },
+  {
+    "feature_name": "Matrix Operations and Computation",
+    "category": "Mathematical Processing"
+  },
+  {
+    "feature_name": "Remote Configuration Management via Version Control",
+    "category": "Configuration Management"
+  },
+  {
+    "feature_name": "Product Bundling and Mix Selection Interface",
+    "category": "E-commerce"
+  },
+  {
+    "feature_name": "Trading Algorithm Debugging and Execution Engine",
+    "category": "Financial"
+  },
+  {
+    "feature_name": "Bulk Product Data Entry and SEO Metadata Management",
+    "category": "Data Management"
+  },
+  {
+    "feature_name": "Financial Market Prediction and Technical Analysis Engine",
+    "category": "AI/ML"
+  },
+  {
+    "feature_name": "Escrow Payment Workflow and Status Callback Handling",
+    "category": "Financial"
+  },
+  {
+    "feature_name": "Geospatial Search and Proximity-based Service Discovery",
+    "category": "Geospatial"
+  },
+  {
+    "feature_name": "Jalali (Persian) Calendar and Timezone Handling",
+    "category": "Localization"
+  },
+  {
+    "feature_name": "Hardware-based Data Encryption",
+    "category": "Security"
+  },
+  {
+    "feature_name": "360-degree Image Viewer",
+    "category": "Media"
+  },
+  {
+    "feature_name": "Activity-based User Ranking System",
+    "category": "Gamification"
+  },
+  {
+    "feature_name": "Kiosk Mode Browser",
+    "category": "User Interface"
+  },
+  {
+    "feature_name": "Document Text Extraction and Structuring",
+    "category": "Data Processing"
+  },
+  {
+    "feature_name": "Inventory and Asset Management",
+    "category": "Business"
+  },
+  {
+    "feature_name": "Event Scheduling and Calendar Management",
+    "category": "Scheduling"
+  },
+  {
+    "feature_name": "Print-optimized Layout and CSS Styling",
+    "category": "Document Processing"
+  },
+  {
+    "feature_name": "Cross-platform Receipt and Invoice Generation",
+    "category": "Document Processing"
+  },
+  {
+    "feature_name": "Content Generation from Scraped Data",
+    "category": "Content Management"
+  },
+  {
+    "feature_name": "Explainable AI for Medical Diagnosis",
+    "category": "AI/ML"
+  },
+  {
+    "feature_name": "Federated Learning for Model Sharing",
+    "category": "AI/ML"
+  },
+  {
+    "feature_name": "Image Retrieval with Deep Learning",
+    "category": "AI/ML"
+  },
+  {
+    "feature_name": "Automated Slide Show with Media Playback",
+    "category": "Media"
+  },
+  {
+    "feature_name": "Preventive Screenshot Protection in Mobile Apps",
+    "category": "Security"
+  },
+  {
+    "feature_name": "Multi-Account Switching for API Rate Limiting",
+    "category": "Automation"
+  },
+  {
+    "feature_name": "Real-time Trading Chart Annotations with Customizable UI",
+    "category": "Financial"
+  },
+  {
+    "feature_name": "Watermarking and Text Overlay on Documents and Images",
+    "category": "Document Processing"
+  },
+  {
+    "feature_name": "Reverse Proxy Performance Optimization",
+    "category": "Networking"
+  },
+  {
+    "feature_name": "Dynamic File Storage and Media Handling in Production Environments",
+    "category": "Storage"
+  },
+  {
+    "feature_name": "Psychometric and Custom Assessment Engine",
+    "category": "Education"
+  },
+  {
+    "feature_name": "Excel-based Data Automation with External API Integration",
+    "category": "Data Processing"
+  },
+  {
+    "feature_name": "Conditional Pricing Engine with External Data Sources",
+    "category": "E-commerce"
+  },
+  {
+    "feature_name": "Automated Captcha Handling in Workflows",
+    "category": "Automation"
+  },
+  {
+    "feature_name": "Speech-to-Text Conversion Engine",
+    "category": "AI/ML"
+  },
+  {
+    "feature_name": "Dynamic Report Generation with Stimulsoft",
+    "category": "Reporting"
+  },
+  {
+    "feature_name": "Calendar System Migration and Date Format Modernization",
+    "category": "Localization"
+  },
+  {
+    "feature_name": "Content Moderation and Classification Engine",
+    "category": "Content Management"
+  },
+  {
+    "feature_name": "Subdomain and DNS Management System",
+    "category": "Networking"
+  },
+  {
+    "feature_name": "Crowdfunding Platform with Wallet Integration",
+    "category": "Financial"
+  },
+  {
+    "feature_name": "Real-time Price Comparison and Arbitrage Engine",
+    "category": "E-commerce"
+  },
+  {
+    "feature_name": "Automated Trading Signal Mirroring System",
+    "category": "Financial"
+  },
+  {
+    "feature_name": "Flash Banner and Rich Media Ad Creation Tool",
+    "category": "Media"
+  },
+  {
+    "feature_name": "Image Sharing and Social Media Platform",
+    "category": "Social"
+  },
+  {
+    "feature_name": "CMS Component and Plugin Development",
+    "category": "Content Management"
+  },
+  {
+    "feature_name": "Interactive Scroll-driven UI Transitions",
+    "category": "User Interface"
+  },
+  {
+    "feature_name": "AI-powered Text and Image Generation API Integration",
+    "category": "AI/ML"
+  },
+  {
+    "feature_name": "Custom Map Area Drawing and Persistence",
+    "category": "Geospatial"
+  },
+  {
+    "feature_name": "Progress Tracking with Gamification Elements",
+    "category": "Gamification"
+  },
+  {
+    "feature_name": "Geospatial Data Overlay and Visualization",
+    "category": "Geospatial"
+  },
+  {
+    "feature_name": "Environmental Data Aggregation and Analysis",
+    "category": "Data Processing"
+  },
+  {
+    "feature_name": "Image-based Assessment and Scoring System",
+    "category": "Education"
+  },
+  {
+    "feature_name": "Interactive Data Annotation on Images/Maps",
+    "category": "User Interface"
+  },
+  {
+    "feature_name": "Multi-tenant Geospatial Data Management",
+    "category": "Data Management"
+  },
+  {
+    "feature_name": "Trading Strategy Backtesting Engine",
+    "category": "Financial"
+  },
+  {
+    "feature_name": "Automated Trading Order Execution with Risk Management",
+    "category": "Financial"
+  },
+  {
+    "feature_name": "Technical Indicator Calculation Engine",
+    "category": "Financial"
+  },
+  {
+    "feature_name": "Video Streaming and Playback",
+    "category": "Media"
+  },
+  {
+    "feature_name": "User Activity and Progress Tracking",
+    "category": "Analytics"
+  },
+  {
+    "feature_name": "Multi-level Access Control and Permission Management",
+    "category": "Security"
+  },
+  {
+    "feature_name": "Advertisement Management and Placement System",
+    "category": "Advertising"
+  },
+  {
+    "feature_name": "Real-time Content Change Detection and Alerting",
+    "category": "Monitoring"
+  },
+  {
+    "feature_name": "Service Discovery and Classified Ads Platform",
+    "category": "E-commerce"
+  },
+  {
+    "feature_name": "User Feedback and Rating System",
+    "category": "Social"
+  },
+  {
+    "feature_name": "Multi-tenant User Profile and Preference Management",
+    "category": "User Management"
+  },
+  {
+    "feature_name": "Content Recommendation and Personalization Engine",
+    "category": "AI/ML"
+  },
+  {
+    "feature_name": "Revenue Sharing and Commission Distribution System",
+    "category": "Financial"
+  },
+  {
+    "feature_name": "Human Resources Management System (HRMS)",
+    "category": "Business"
+  },
+  {
+    "feature_name": "Real-time Video Streaming and Transcoding",
+    "category": "Media"
+  },
+  {
+    "feature_name": "Live Video Broadcasting and Recording",
+    "category": "Media"
+  },
+  {
+    "feature_name": "Multi-server Media Storage and Load Balancing",
+    "category": "Storage"
+  },
+  {
+    "feature_name": "Profit and Loss Sharing Calculation Engine",
+    "category": "Financial"
+  },
+  {
+    "feature_name": "Investment Tracking and Historical Data Management",
+    "category": "Financial"
+  },
+  {
+    "feature_name": "Heatmap Visualization for Geospatial Data",
+    "category": "Data Visualization"
+  },
+  {
+    "feature_name": "Smart Document Comparison and Semantic Matching",
+    "category": "Data Processing"
+  },
+  {
+    "feature_name": "API Key Management with Expiry and Access Control",
+    "category": "Security"
+  },
+  {
+    "feature_name": "Structured Data Extraction from PDF Documents",
+    "category": "Data Processing"
+  },
+  {
+    "feature_name": "Automated Email Processing and Data Extraction",
+    "category": "Automation"
+  },
+  {
+    "feature_name": "Warranty and Repair Tracking System",
+    "category": "Product Management"
+  },
+  {
+    "feature_name": "Time-series Data Visualization with Customizable UI",
+    "category": "Data Visualization"
+  },
+  {
+    "feature_name": "Interactive Calendar System with API Integration",
+    "category": "Scheduling"
+  },
+  {
+    "feature_name": "Form Design and Validation with AJAX Submission",
+    "category": "User Input"
+  },
+  {
+    "feature_name": "Telegram Bot Workflow Automation",
+    "category": "Automation"
+  },
+  {
+    "feature_name": "OpenStreetMap Integration and Customization",
+    "category": "Geospatial"
+  },
+  {
+    "feature_name": "Automated Web Monitoring with Alerting",
+    "category": "Monitoring"
+  },
+  {
+    "feature_name": "Game Automation with Randomized User Interaction Simulation",
+    "category": "Automation"
+  },
+  {
+    "feature_name": "Smart Contract Debugging and Testing Framework",
+    "category": "Blockchain"
+  },
+  {
+    "feature_name": "User Group-based Pricing and Discount Engine",
+    "category": "E-commerce"
+  },
+  {
+    "feature_name": "File Upload with Size and Type Restrictions",
+    "category": "Storage"
+  },
+  {
+    "feature_name": "Interactive Social Media Bot with Multi-path Navigation",
+    "category": "Automation"
+  },
+  {
+    "feature_name": "Real-time Availability Monitoring with Multi-channel Alerting",
+    "category": "Monitoring"
+  },
+  {
+    "feature_name": "Deep Learning Model Training and Deployment Pipeline",
+    "category": "AI/ML"
+  },
+  {
+    "feature_name": "Excel Data Import and Dynamic Chart Visualization",
+    "category": "Data Visualization"
+  },
+  {
+    "feature_name": "File Renaming and Batch Processing Automation",
+    "category": "Data Processing"
+  },
+  {
+    "feature_name": "Server Health Monitoring with Automated Alerts",
+    "category": "Monitoring"
+  },
+  {
+    "feature_name": "Certificate Issuance and Expiry Management System",
+    "category": "Document Processing"
+  },
+  {
+    "feature_name": "User-generated Content Moderation and Publishing Workflow",
+    "category": "Content Management"
+  },
+  {
+    "feature_name": "Wallet and Payout Request Management System",
+    "category": "Financial"
+  },
+  {
+    "feature_name": "User-generated Video Contest and Voting System",
+    "category": "Social"
+  },
+  {
+    "feature_name": "Product Data Synchronization with Draft and Pricing Rules",
+    "category": "Data Processing"
+  },
+  {
+    "feature_name": "Multi-vendor Marketplace with Dynamic Product Filtering",
+    "category": "E-commerce"
+  },
+  {
+    "feature_name": "Offline Interactive Web Application with Python Code Execution",
+    "category": "User Interface"
+  },
+  {
+    "feature_name": "Ad Blocking and Content Filtering in WebView",
+    "category": "Security"
+  },
+  {
+    "feature_name": "Automated Media Scraping with Metadata Tagging and Excel Export",
+    "category": "Data Processing"
+  },
+  {
+    "feature_name": "Excel Data Mapping and Transformation Automation",
+    "category": "Data Processing"
+  },
+  {
+    "feature_name": "Service Provider Matching and Booking System with Payment Integration",
+    "category": "E-commerce"
+  },
+  {
+    "feature_name": "Real-time Location Sharing and Tracking",
+    "category": "Geospatial"
+  },
+  {
+    "feature_name": "Background Service for Continuous Data Transmission",
+    "category": "Mobile"
+  },
+  {
+    "feature_name": "Dynamic Map Markers with Custom Metadata",
+    "category": "Geospatial"
+  },
+  {
+    "feature_name": "GPS-based Proximity Detection and Reward System",
+    "category": "Geospatial"
+  },
+  {
+    "feature_name": "Polynomial and Non-linear Regression Engine",
+    "category": "Mathematical Processing"
+  },
+  {
+    "feature_name": "Genetic Algorithm-based Graph Traversal and Optimization",
+    "category": "AI/ML"
+  },
+  {
+    "feature_name": "User-generated Content Tagging and Annotation System",
+    "category": "Content Management"
+  },
+  {
+    "feature_name": "Offline Geospatial Data Storage and Navigation",
+    "category": "Geospatial"
+  },
+  {
+    "feature_name": "Automated Domain Validation and DNS Configuration",
+    "category": "Networking"
+  },
+  {
+    "feature_name": "3D Character/Avatar Generation from Data",
+    "category": "AI/ML"
+  },
+  {
+    "feature_name": "CAD Automation and Parametric Drawing",
+    "category": "CAD/Engineering"
+  },
+  {
+    "feature_name": "Lip-Syncing for Images using Deep Learning",
+    "category": "AI/ML"
+  },
+  {
+    "feature_name": "Automated Media Upload and Scheduling System",
+    "category": "Automation"
+  },
+  {
+    "feature_name": "Domain Redirection and URL Forwarding Management",
+    "category": "Networking"
+  },
+  {
+    "feature_name": "User Watchlist and Favorites Management",
+    "category": "User Management"
+  },
+  {
+    "feature_name": "Real-time SignalR Hub Integration for Cross-Platform Communication",
+    "category": "Integration"
+  },
+  {
+    "feature_name": "Bulk File Search, Copy, and Transformation Automation",
+    "category": "Data Processing"
+  },
+  {
+    "feature_name": "Cryptocurrency Price Aggregation and Display Engine",
+    "category": "Financial"
+  },
+  {
+    "feature_name": "Scroll-Triggered Animation and UI Transitions",
+    "category": "User Interface"
+  },
+  {
+    "feature_name": "Framework Migration and Code Refactoring",
+    "category": "Development Tools"
+  },
+  {
+    "feature_name": "Dynamic Pricing and Online Marketplace Engine",
+    "category": "E-commerce"
+  },
+  {
+    "feature_name": "Email Delivery Optimization and Spam Prevention",
+    "category": "Communication"
+  },
+  {
+    "feature_name": "Web Performance Profiling and Optimization",
+    "category": "Performance"
+  },
+  {
+    "feature_name": "Responsive Mobile UI Adaptation and Customization",
+    "category": "User Interface"
+  },
+  {
+    "feature_name": "Video Format Conversion and Media Processing",
+    "category": "Media"
+  },
+  {
+    "feature_name": "User Task Management and Workflow Automation",
+    "category": "Workflow Automation"
+  },
+  {
+    "feature_name": "Conditional Logic Engine for Form-based Recommendations",
+    "category": "User Input"
+  },
+  {
+    "feature_name": "Messaging Platform Bot Integration with Payment Handling",
+    "category": "Automation"
+  },
+  {
+    "feature_name": "Automated Social Media Posting with Media Attachment",
+    "category": "Automation"
+  }
+]

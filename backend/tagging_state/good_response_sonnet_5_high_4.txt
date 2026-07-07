@@ -1,0 +1,39 @@
+[
+  {
+    "project_id": "66f5a903-a1dc-4e02-97bf-6949aab9dfd6",
+    "features": {
+      "Infrastructure & Operations": 1,
+      "SEO": 1
+    },
+    "technology_modifiers": {
+      "WordPress": 1,
+      "WooCommerce": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 0,
+      "crud_modules": 0
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "admin_panel": 0,
+      "offline": 0,
+      "legacy_system": 1,
+      "existing_codebase": 1,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "optimization",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  }
+]

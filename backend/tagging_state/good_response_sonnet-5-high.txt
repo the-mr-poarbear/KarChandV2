@@ -1,0 +1,42 @@
+[
+  {
+    "project_id": "a6ae2518-7cb9-4915-8629-13090f989342",
+    "features": {
+      "Administration Panel": 1,
+      "Content Management": 1,
+      "Product Catalog": 1,
+      "Pricing & Discount Rules": 1,
+      "Order Management": 1,
+      "Bots & Automation": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 1,
+      "estimated_screens": 5,
+      "crud_modules": 2
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 0,
+      "admin_panel": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "medium",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  }
+]

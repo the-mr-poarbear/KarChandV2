@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, DateTime, Text, ForeignKey, Integer, Float, Index , UniqueConstraint
 from sqlalchemy.orm import relationship
-from datetime import datetime
+from datetime import datetime, timezone
 import uuid
 from app.core.database import Base
 
@@ -27,8 +27,15 @@ class Project(Base):
     category_id = Column(String, ForeignKey("categories.id", ondelete="SET NULL"), nullable=True, index=True)
     
     # Timestamps
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(
+    DateTime,
+    default=lambda: datetime.now(timezone.utc).replace(tzinfo=None)
+)
+    updated_at = Column(
+    DateTime,
+    default=lambda: datetime.now(timezone.utc).replace(tzinfo=None),
+    onupdate=lambda: datetime.now(timezone.utc).replace(tzinfo=None)
+)
 
     # Relationship (no cascade delete)
     category = relationship("Category", back_populates="projects")

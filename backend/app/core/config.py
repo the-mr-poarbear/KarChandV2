@@ -12,6 +12,12 @@ class Settings(BaseSettings):
     PONISHA_CATEGORIES_URL:str
     PONISHA_SEARCH_URL:str
     PONISHA_API_URL:str
+    LLM_BASE_URL:str
+    LLM_API_KEY:str
+    LLM_API_KEY_2:str
+    LLM_API_KEY_3:str
+    LLM_API_KEY_4:str
+    NAVAVSAAN_API_KEY:str
     
     # Optional with default
     DATABASE_URL: str = "sqlite:///./app.db"

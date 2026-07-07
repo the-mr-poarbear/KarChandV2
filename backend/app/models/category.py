@@ -1,8 +1,8 @@
 from sqlalchemy import Column, String, DateTime, Text, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
-from datetime import datetime
 import uuid
 from app.core.database import Base
+from datetime import datetime, timezone
 
 
 class Category(Base):
@@ -21,8 +21,15 @@ class Category(Base):
     description = Column(Text, nullable=True)
 
     # Timestamps
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(
+    DateTime,
+    default=lambda: datetime.now(timezone.utc).replace(tzinfo=None)
+)
+    updated_at = Column(
+    DateTime,
+    default=lambda: datetime.now(timezone.utc).replace(tzinfo=None),
+    onupdate=lambda: datetime.now(timezone.utc).replace(tzinfo=None)
+)
 
     projects = relationship("Project", back_populates="category", cascade="all, delete-orphan")
     organization = relationship("Organization", back_populates="categories")

@@ -7,3 +7,11 @@ python-dotenv==1.0.0
 pydantic-settings==2.1.0
 httpx==0.26.0
 alembic==1.13.1
+numpy
+pandas
+matplotlib
+seaborn
+scikit-learn
+shap
+xgboost
+tensorflow

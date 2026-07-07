@@ -1,0 +1,75 @@
+=== SYSTEM ===
+You are a senior software architect analyzing freelance project requirements.
+
+You will receive a batch of projects. For each project, return its feature vector based on
+this taxonomy.
+
+FEATURES (0–5 confidence scale — 0 if absent, 1 if weak signal/barely implied, 2 if mentioned but minor,
+3 if explicitly required but not central, 4 if clearly required, 5 if a defining feature of the project):
+["Authentication", "Authorization & Role Management", "User Management", "User Profiles", "Infrastructure & Operations", "Administration Panel", "Dashboard", "Settings & Configuration", "Content Management", "Rich Text Editing", "Media Management", "Forms & Data Collection", "File Upload & Storage", "Document Management", "Search", "Filtering & Sorting", "Import & Export", "Reporting", "Analytics", "Data Processing", "Data Migration", "Notifications", "Messaging & Chat", "Email Services", "SMS Services", "Video & Voice Communication", "Scheduling & Calendar", "Workflow Automation", "Task Management", "Approval Workflow", "Payment Processing", "Wallet & Balance Management", "Shopping Cart & Checkout", "Order Management", "Inventory Management", "Product Catalog", "Pricing & Discount Rules", "Marketplace", "Booking & Reservation", "Subscription Management", "External API Integration", "Payment Gateway Integration", "Social Authentication", "Map & Geolocation Integration", "Hardware Integration", "Image Processing", "Video Processing", "Audio Processing", "Streaming", "Document Processing", "Artificial Intelligence Integration", "Recommendation & Personalization", "Machine Learning Pipeline", "Real-time Updates", "Background Jobs", "Caching", "Offline Support", "Data Synchronization", "Multi-tenancy", "Plugin / Extension System", "Localization & Internationalization", "Accessibility", "Responsive Design", "SEO", "Security", "Audit Logs", "Monitoring & Logging", "Backup & Recovery", "Mobile Application", "Web Application", "Desktop Application", "Browser Extension", "Social Features", "Comments & Reviews", "Gamification", "Visualization & Charts", "Maps & Spatial Analysis", "Scientific & Mathematical Computation", "Optimization & Simulation", "Web Scraping & Crawling", "Bots & Automation", "Code Generation & Development Tools"]
+
+APPLICATION TYPE (binary — 1 if the project belongs to this type, 0 if not; multiple types allowed):
+["website", "web_application", "mobile_application", "desktop_application", "api_backend", "ecommerce", "marketplace", "cms", "crm", "erp", "lms", "booking_system", "social_network", "media_platform", "financial_system", "healthcare_system", "real_estate_platform", "automation_system", "iot_system", "ai_application", "browser_extension", "other"]
+Clarifications:
+- "website": Primarily informational or content-based, not a full interactive application.
+- "web_application": Interactive software running in a browser.
+- "marketplace": Multiple buyers/sellers or service providers transacting with each other.
+- "api_backend": Primary deliverable is an API or backend service, not a UI.
+- "other": Use only if none of the above types fit.
+
+TECHNOLOGY MODIFIERS (binary — 1 if the project explicitly uses this platform/tech, 0 if not):
+["WordPress", "WooCommerce", "Joomla", "Custom Development"]
+
+NUMERIC MODIFIERS (always return all keys; use 0 only if truly none detectable — always estimate):
+- external_api_count: How many distinct external APIs or third-party services does this project integrate? Count each distinct service as 1 (e.g. Stripe + Twilio + Google Maps = 3).
+- estimated_screens: How many distinct UI screens or pages does this project likely have? Estimate based on described features and application type.
+- estimated_entities: How many distinct data entities need full CRUD operations? (e.g. User, Product, Order each count as 1)
+
+BOOLEAN MODIFIERS (1 or 0 — always return all keys):
+- real_time: Does it require real-time updates — websockets, live data feeds, or push notifications?
+- mobile: Does it need a native or hybrid mobile app (iOS and/or Android)?
+- web: Does it need a web interface (browser-based UI)?
+- offline: Does it need to work without an internet connection (offline-first)?
+- legacy_system: Does it involve integrating with or maintaining a legacy system?
+- existing_codebase: Does it require working on an existing codebase rather than starting from scratch?
+- requires_refactoring: Does it explicitly require refactoring or restructuring existing code?
+- requires_reverse_engineering: Does it require reverse engineering an existing system, API, or undocumented behavior?
+- cross_platform: Does it need to run across multiple platforms (e.g. iOS + Android, or web + desktop)?
+
+ENUM MODIFIERS (pick exactly one value from the allowed list — always return all keys):
+- project_type (new | maintenance | migration | bugfix | optimization | testing | consulting): Overall nature of the work being requested.
+- ai_level (none | basic | advanced): none=no AI involved, basic=simple AI API call (e.g. ChatGPT wrapper), advanced=custom model training, fine-tuning, or complex ML pipeline.
+- business_logic (low | medium | high): How much complex domain-specific business logic does this project contain? low=mostly CRUD, medium=some workflows or rules, high=complex domain logic, pricing engines, multi-step workflows.
+- data_volume (small | medium | large): Expected scale of data the system will handle. small=hundreds to thousands of records, medium=tens to hundreds of thousands, large=millions+ or big data processing.
+- integration_complexity (low | medium | high): How complex are the external integrations? low=0-1 simple APIs, medium=2-4 APIs or one complex integration, high=5+ integrations or deeply coupled third-party systems.
+- ui_complexity (low | medium | high): How complex is the user interface? low=simple forms and lists, medium=custom components or moderate interactivity, high=complex dashboards, drag-and-drop, data-heavy visualizations.
+- algorithmic_complexity (low | medium | high): How algorithmically demanding is the core logic? low=standard CRUD and routing, medium=moderate computation or optimization, high=heavy computation, simulations, advanced algorithms, or real-time processing.
+
+Return a JSON array with one object per project, in this exact shape:
+{
+  "project_id": "<the project_id you were given>",
+  "features": {"<feature_name>": <0-5>, ...},
+  "application_type": {"<type>": 1, ...},
+  "technology_modifiers": {"<tech>": 1, ...},
+  "numeric_modifiers": {"external_api_count": 0, "estimated_screens": 0, "estimated_entities": 0},
+  "boolean_modifiers": {"real_time": 0, "mobile": 0, "web": 0, "offline": 0, "legacy_system": 0, "existing_codebase": 0, "requires_refactoring": 0, "requires_reverse_engineering": 0, "cross_platform": 0},
+  "enum_modifiers": {"project_type": "new", "ai_level": "none", "business_logic": "low", "data_volume": "small", "integration_complexity": "low", "ui_complexity": "low", "algorithmic_complexity": "low"}
+}
+
+Rules:
+- Return ALL projects in the batch, in the same order.
+- For features, ONLY include keys with value >= 1 (omit 0s to save tokens).
+- For application_type and technology_modifiers, ONLY include keys with value 1.
+- For numeric, boolean, and enum modifiers, ALWAYS include all keys.
+- When tagging projects with existing_codebase=1, only tag features that are to be ADDED or MODIFIED, not the entire feature set of the existing codebase.
+- Omit features that come pre-installed with the technology platform (e.g. admin panels in WordPress).
+- Be strict — do not make assumptions that are unlikely given the project description.
+- A project may belong to MULTIPLE application types simultaneously.
+- Return raw JSON only — no markdown fences, no explanation text.
+- If a feature is scored ≥4, verify that at least one corresponding application_type is also set to 1 while keeping the feature in features list (e.g. Bots & Automation ≥4 → automation_system; Payment Processing ≥4 → financial_system or ecommerce; Booking & Reservation ≥4 → booking_system).
+
+
+=== USER ===
+Tag these 5 projects:
+
+[{"project_id": "de64fc92-3ca1-4a86-8018-b5bfff5fa95b", "title": "ساخت اندیکاتور برای متاتریدر۴ - برنامه نویسی MQL", "description": "یک یا چند اندیکاتور برای متاتریدر ۴ میخوام.\nمیخوام در موقعیت هایی که میگم و شروطی که بوجود میاد فلش خرید یا فروش بندازه.\nباید هم از قیمت اطلاعات بگیره هم از چندین اندیکاتور دیگه و زمانیکه شروط برقرار بود فلش بندازه.", "skills": ["برنامه نویسی سی پلاس پلاس (C++)", "جاوا (Java)", "جاوا اسکریپت (JavaScript)", "الگوریتم"]}, {"project_id": "19a8ecda-b737-4045-ab6c-628eab834c5b", "title": "مانیتورینگ نیروگاه خورشیدی", "description": "جهت پایش و مانیتورینگ لحظه ای نیروگاه خورشیدی و ثبت داده های مختلف اینورتر ها نیاز به طراحی سامانه پایش و مانیتورینگ پارامتر های مختلف سلول های خورشیدی و توان تولیدی و مصرفی نیروگاه می باشد\nارتباط با اینورترها برقرار شده و داده ها قابل خواندن در قالب JSON می باشد", "skills": ["جاوا (Java)", "Node.js", "MySQL", "الگوریتم", "SQL Server"]}, {"project_id": "541aa3f3-6e64-4b97-9902-2507cfbf0cb6", "title": "اپلیکشن تقویم", "description": "من نیازهایت را این‌جوری می‌بینم:\n\n📱 پلتفرم: موبایل (Android + iOS) – با Flutter\n\n🌐 زبان: کاملاً فارسی، راست‌به‌چپ\n\n🎨 تم رنگی:\n\nپس‌زمینه: سفید\n\nرنگ اصلی: سرمه‌ای\n\nرنگ تأکیدی: قرمز\n(می‌تونیم مثلاً این‌جوری پیشنهاد بدیم – البته باید با برندبوک خودتون چک شه:\n\nWhite: #FFFFFF\n\nNavy: #002B5C (یا نزدیک به هویت )\n\nRed: #E30613 )\n\n🏦 برندینگ:\n\nاستفاده از لوگو\n\nاستفاده از لوگو\n\nرعایت safe margin، عدم کشیدگی لوگو، و استفاده از نسخه‌ی رسمی (svg/png) که خودتون می‌دید.\n\n📅 اتصال به تقویم ایرانی (جلالی) + مناسبت‌ها:\n\nنمایش تاریخ شمسی و مناسبت‌ها در هوم‌پیج\n\nامکان نمایش ماهانه / لیست مناسبت‌ها\n\n🔔 نوتیف‌ باکس:\n\nصفحه/باکس برای اعلان‌ها (اعلان‌های سیستم، پیام‌های تبلیغاتی، اطلاعیه‌های شرکت)\n\n📢 جایگاه تبلیغاتی:\n\nاسلات بنر تبلیغاتی در صفحه اصلی\n\nاحتمالاً full-screen / popup برای کمپین‌ها", "skills": ["برنامه نویسی و ساخت اپلیکیشن اندروید (Android)", "آی او اس (iOS)", "طراحی تجربه کاربری (UX)", "طراحی رابط کاربری (UI)", "طراحی واسط کاربر موبایل"]}, {"project_id": "faa19073-99e4-40fd-96c6-5caba2ee1706", "title": "سیستم مشخصات فنی محصولات برای همه دسته‌بندی‌ها با ACF Pro", "description": "هدف من این است که برای همه دسته‌بندی‌های محصولات بتوان مشخصات فنی اختصاصی تعریف و مدیریت کرد، به‌طوری که:\n\n* از افزونه ACF Pro برای ورود ساختارمند مشخصات فنی استفاده شود\n* هر دسته‌بندی محصول (مثلاً موبایل، لپ‌تاپ، لوازم جانبی و …) مشخصات فنی مخصوص به خودش را داشته باشد\n* امکان تعریف گروه‌بندی مشخصات (مثلاً نمایشگر، سخت‌افزار، باتری و…) وجود داشته باشد\n* مشخصات فنی در صفحه محصول به‌صورت جدولی، مرتب و مشابه دیجی‌کالا نمایش داده شوند\n* فقط مشخصاتی که مقدار دارند در سایت نمایش داده شوند\n* ساختار پیاده‌سازی شده قابل توسعه باشد (اضافه شدن دسته‌بندی یا مشخصات جدید در آینده)", "skills": ["HTML", "جاوا اسکریپت (JavaScript)", "پی اچ پی (PHP)", "سی اس اس (CSS)", "طراحی سایت فروشگاهی"]}, {"project_id": "d309f45d-a75f-453c-bb4f-5e55a02e618d", "title": "«تکمیل  پلتفرم ثبت آگهی و کارت ویزیت دیجیتال", "description": "عنوان پروژه: تکمیل و بهینه‌سازی کامل پلتفرم ثبت آگهی و کارت ویزیت دیجیتال\n\nلینک سایت: https://kliik.ir\n\nوضعیت فعلی: سایت زنده است و داشبورد اولیه کار می‌کند، اما نیاز به تکمیل و رفع باگ دارد.\n\nکارهای مورد نیاز:\n• تکمیل کامل ماژول ثبت آگهی (عکس، دسته‌بندی، نقشه، قیمت، وضعیت و …)\n• رفع باگ‌های داشبورد (نمودار رشد، اعتبارسنجی فرم‌ها و …)\n• ادغام درگاه پرداخت زرین‌پال + کیف پول\n• سیستم سطوح کاربری و معرفی دوستان (اتوماتیک)\n• بهینه‌سازی کامل سرعت و موبایل (Responsive)\n• امنیت کامل وب‌اپلیکیشن\n• طراحی مجدد UI/UX داشبورد و صفحات (مدرن و جذاب)\n• تحویل ۴–۶ هفته\n\nترجیح بک‌اند: Laravel یا Node.js\nفرانت‌اند: Vue.js یا React\n\nمهارت‌های ضروری:\n- Laravel 9/10 یا Node.js (NestJS)\n- Vue.js 3 یا React (Next.js)\n- Tailwind CSS یا طراحی حرفه‌ای UI\n- تجربه واقعی ادغام زرین‌پال و پنل پیامک\n- امنیت وب‌اپلیکیشن\n-", "skills": ["جاوا (Java)", "جاوا اسکریپت (JavaScript)", "Node.js", "پایتون (Python)", "الگوریتم"]}]

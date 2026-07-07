@@ -1,0 +1,40 @@
+============================================================
+ML DATASET BUILD REPORT
+============================================================
+Total rows (full dataset)  : 5,622
+Training rows (has budget) : 3,944 (70.2%)
+Columns                    : 164
+
+--- USD rate coverage ---
+Projects with a usable USD rate: 5,622 (100.0%)
+
+--- Budget stats (training set, USD) ---
+final_budget_usd:
+  median=1.74  mean=4.34  min=0.05  max=289.13
+budget_min_usd:
+  median=0.69  mean=2.19  min=0.04  max=289.13
+budget_max_usd:
+  median=2.84  mean=5.57  min=0.00  max=289.40
+
+--- Organizations ---
+  Karlancer: 2,916
+  Ponisha: 2,706
+
+--- Missing value summary ---
+  final_budget: 1,678 (29.8%)
+  log_final_budget: 1,678 (29.8%)
+  final_budget_usd: 1,678 (29.8%)
+  log_final_budget_usd: 1,678 (29.8%)
+  budget_range_ratio: 1 (0.0%)
+
+--- Recommended ML targets ---
+  Primary: log_final_budget_usd (regression, use training_set.csv)
+           IRR targets are NOT recommended given 15 years of
+           currency instability — use the *_usd columns instead.
+  Alt: has_final_budget (classification — did project complete?)
+
+--- Recommended encoding ---
+  Feature scores (0-5): keep as-is or binarize at >=3
+  Enum cols: one-hot encode before training
+  skills: TF-IDF or skill_count as a numeric proxy
+  description: TF-IDF or embedding if using NLP features
