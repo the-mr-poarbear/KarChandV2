@@ -140,8 +140,8 @@ client = OpenAI(
 completion = client.chat.completions.create(
     model="z-ai/glm-5.2",
     messages=[
-        {"role": "system", "content": SYSTEM_PROMPT["system_prompt"]},
-        {"role": "user", "content": user_content},
+        {"role": "system", "content":"hi" },
+        {"role": "user", "content": "hi"},
     ],
     temperature=1,
     top_p=1,

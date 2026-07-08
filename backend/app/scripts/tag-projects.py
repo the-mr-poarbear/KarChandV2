@@ -4,20 +4,29 @@ taxonomy, using an LLM. Outputs a CSV with one row per project and one
 column per feature/modifier.
 
 Usage:
-    python tag_projects.py
-    python tag_projects.py --organization Karlancer
-    python tag_projects.py --limit 500
+    python -m app.scripts.tag_projects
+    python -m app.scripts.tag_projects --organization Karlancer
+    python -m app.scripts.tag_projects --limit 500
+    python -m app.scripts.tag_projects --para 2
 
 Resumes automatically if interrupted — projects are processed in
 created_at order, and progress tracks the last successfully tagged
 project's created_at timestamp, so a resume just continues from there.
 
+With --para N > 1, work is sharded round-robin across N worker
+processes, each with its own progress/output file (progress_{i}.json,
+tagged_projects_{i}.csv) and its own subset of API keys. Run
+`merge_worker_outputs()` (or just concat the CSVs) once all workers finish.
+
 The taxonomy (features, modifiers, descriptions, rules) is defined in
 taxonomy.json — edit that file to tune without touching this script.
 """
+import signal
+import sys
 import argparse
 import csv
 import json
+import multiprocessing
 import re
 import time
 from datetime import datetime
@@ -41,14 +50,84 @@ DEFAULT_TIMEOUT_RETRY_SECONDS = 125
 MODEL = "z-ai/glm-5.2"
 
 STATE_DIR = Path("tagging_state")
-PROGRESS_PATH = STATE_DIR / "progress.json"
-OUTPUT_PATH = STATE_DIR / "tagged_projects.csv"
 TAXONOMY_PATH = Path(__file__).parent.parent / "taxonomy/taxonomy.json"
 
-current_api_key = settings.LLM_API_KEY
+ALL_KEYS = [
+    settings.LLM_API_KEY,
+    settings.LLM_API_KEY_2,
+    settings.LLM_API_KEY_3,
+    settings.LLM_API_KEY_4,
+]
 
-client = OpenAI(base_url=settings.LLM_BASE_URL, api_key=current_api_key)
+# These are set per-process in `init_worker_client` / at module import time
+# for the non-parallel (--para 1) path.
+client = None
+KEY_POOL: list[str] = []
+_key_index = 0
 _last_call_time = 0.0
+
+
+
+# ---------------------------------------------------------------------------
+# Timing
+# ---------------------------------------------------------------------------
+_call_durations: list[float] = []
+
+
+def _record_call_duration(duration: float, worker_tag: str = ""):
+    global _call_durations
+    _call_durations.append(duration)
+    avg = sum(_call_durations) / len(_call_durations)
+    prefix = f"[{worker_tag}] " if worker_tag else ""
+    print(f"{prefix}⏱  response took {duration:.2f}s "
+          f"(avg over {len(_call_durations)} calls: {avg:.2f}s)")
+
+
+def _save_call_timing(worker_id: int | None):
+    suffix = f"_{worker_id}" if worker_id is not None else ""
+    path = STATE_DIR / f"call_timing{suffix}.json"
+    save_json(path, {
+        "count": len(_call_durations),
+        "total_seconds": sum(_call_durations),
+        "average_seconds": (sum(_call_durations) / len(_call_durations)) if _call_durations else 0,
+        "durations": _call_durations,
+    })
+
+def get_key_pools(para: int) -> list[list[str]]:
+    """
+    Splits ALL_KEYS into `para` pools, one per worker.
+
+    - If len(ALL_KEYS) is evenly divisible by `para` (para in 1, 2, 4),
+      each worker gets a private contiguous chunk of keys and only
+      switches within that chunk on rate limit.
+    - Otherwise (e.g. para=3), an even split isn't possible. Each worker
+      still starts on a distinct key (round-robin assigned), but its
+      switch-on-rate-limit fallback cycles through the FULL key list in
+      a fixed linear order, since there's no clean private subset.
+    """
+    n = len(ALL_KEYS)
+    if para <= 0:
+        raise ValueError("--para must be >= 1")
+
+    if n % para == 0:
+        chunk = n // para
+        return [ALL_KEYS[i * chunk:(i + 1) * chunk] for i in range(para)]
+
+    # Uneven split: fall back to "everyone shares the full linear list",
+    # just starting from a different offset per worker.
+    pools = []
+    for i in range(para):
+        rotated = ALL_KEYS[i % n:] + ALL_KEYS[:i % n]
+        pools.append(rotated)
+    return pools
+
+
+def init_worker_client(key_pool: list[str]):
+    """Call once per process before any call_llm() calls."""
+    global client, KEY_POOL, _key_index
+    KEY_POOL = key_pool
+    _key_index = 0
+    client = OpenAI(base_url=settings.LLM_BASE_URL, api_key=KEY_POOL[0])
 
 
 # ---------------------------------------------------------------------------
@@ -74,7 +153,6 @@ def build_derived(tx: dict) -> dict:
     enum_fields     = tx["enum_modifiers"]["fields"]       # {name: {values, description}}
     rules           = tx["prompt_rules"]["rules"]
 
-    # CSV column order: metadata + features + app_types + tech + numeric + boolean + enum
     csv_columns = (
         ["project_id", "title", "category", "organization", "created_at"]
         + features
@@ -85,7 +163,6 @@ def build_derived(tx: dict) -> dict:
         + list(enum_fields.keys())
     )
 
-    # Build the system prompt dynamically from taxonomy data
     numeric_prompt_lines = "\n".join(
         f"- {name}: {desc}" for name, desc in numeric_fields.items()
     )
@@ -97,12 +174,10 @@ def build_derived(tx: dict) -> dict:
         for name, info in enum_fields.items()
     )
 
-    # Inject application type definitions as a clarification block
     app_def_lines = "\n".join(
         f'- "{k}": {v}' for k, v in app_definitions.items()
     ) if app_definitions else ""
 
-    # Enum defaults for the output shape example
     enum_defaults = {name: info["values"][0] for name, info in enum_fields.items()}
     boolean_defaults = {name: 0 for name in boolean_fields}
     numeric_defaults = {name: 0 for name in numeric_fields}
@@ -159,7 +234,6 @@ Rules:
     }
 
 
-# Load once at startup — any import of this module gets the same derived data
 _raw_taxonomy = load_taxonomy(TAXONOMY_PATH)
 TAXONOMY = build_derived(_raw_taxonomy)
 
@@ -183,7 +257,6 @@ def save_json(path: Path, data):
 
 
 def extract_json(raw_text: str):
-    """Robust extraction: handles fences, preamble text, and trailing prose."""
     text = raw_text.strip()
     fence_match = re.search(r"```(?:json)?\s*(.*?)\s*```", text, re.DOTALL)
     if fence_match:
@@ -234,17 +307,18 @@ def _extract_retry_after_seconds(error: Exception) -> float | None:
     return None
 
 
-def call_llm(user_content: str) -> str:
-    global _last_call_time
+def call_llm(user_content: str, worker_tag: str = "") -> str:
+    global _last_call_time, _key_index
     elapsed = time.monotonic() - _last_call_time
     if elapsed < MIN_SECONDS_BETWEEN_CALLS:
         time.sleep(MIN_SECONDS_BETWEEN_CALLS - elapsed)
 
+    prefix = f"[{worker_tag}] " if worker_tag else ""
     last_error = None
     for attempt in range(1, MAX_RETRIES + 1):
-        print(f"   🚀  Calling LLM (attempt {attempt}/{MAX_RETRIES})")
+        print(f"{prefix}🚀  Calling LLM (attempt {attempt}/{MAX_RETRIES})")
+        request_start = time.monotonic()
         try:
-            print("trying to call LLM")
             response = client.chat.completions.create(
                 model=MODEL,
                 max_tokens=4096,
@@ -253,67 +327,34 @@ def call_llm(user_content: str) -> str:
                     {"role": "user", "content": user_content},
                 ],
             )
-            print("LLM call successful")
+            duration = time.monotonic() - request_start
+            _record_call_duration(duration, worker_tag=worker_tag)
+
+            print(f"{prefix}LLM call successful")
             _last_call_time = time.monotonic()
             result = response.choices[0].message.content or ""
 
             STATE_DIR.mkdir(exist_ok=True)
-            (STATE_DIR / "last_request.txt").write_text(
+            suffix = f"_{worker_tag}" if worker_tag else ""
+            (STATE_DIR / f"last_request{suffix}.txt").write_text(
                 f"=== SYSTEM ===\n{TAXONOMY['system_prompt']}\n\n=== USER ===\n{user_content}",
                 encoding="utf-8",
             )
-            (STATE_DIR / "last_response.txt").write_text(result, encoding="utf-8")
+            (STATE_DIR / f"last_response{suffix}.txt").write_text(result, encoding="utf-8")
 
             return result
         except Exception as e:
-            print("exception in call_llm:",e)
+            duration = time.monotonic() - request_start
+            print(f"{prefix}exception in call_llm after {duration:.2f}s:", e)
             last_error = e
-            error_str = str(e)
-            retry_after = _extract_retry_after_seconds(e)
-            is_rate_limited = "429" in error_str or "rate_limit" in error_str.lower()
-            is_gateway_error = any(c in error_str for c in ("502", "503", "504", "524"))
 
-            switched = False
+            _key_index = (_key_index + 1) % len(KEY_POOL)
+            client.api_key = KEY_POOL[_key_index]
+            print(f"{prefix}⚠️  Switching to key #{_key_index + 1}/{len(KEY_POOL)} in this worker's pool.")
 
-            if client.api_key == settings.LLM_API_KEY:
-                print(f"   ⚠️  LLM API key seems rate-limited. Switching to backup key.")
-                client.api_key = settings.LLM_API_KEY_2
-                switched = True
-            elif client.api_key == settings.LLM_API_KEY_2:
-                print(f"   ⚠️  LLM API key seems rate-limited. Switching to backup key 3.")
-                client.api_key = settings.LLM_API_KEY_3
-                switched = True
-            elif client.api_key == settings.LLM_API_KEY_3:
-                print(f"   ⚠️  LLM API key seems rate-limited. Switching to available key.")
-                client.api_key = settings.LLM_API_KEY_4
-                switched = True
-            else:
-                print(f"   ⚠️  All API keys seem rate-limited, fallbacking to original key.")
-                client.api_key = settings.LLM_API_KEY
-
-            # if switched:
-            #     if retry_after is not None:
-            #         wait = retry_after + 5
-            #     elif is_rate_limited:
-            #         wait = 65
-            #     elif is_gateway_error:
-            #         wait = DEFAULT_TIMEOUT_RETRY_SECONDS
-            #     else:
-            #         wait = RETRY_BACKOFF_SECONDS * attempt
-
-            #     print(f"   ⚠️  API call failed (attempt {attempt}/{MAX_RETRIES}): "
-            #         f"{error_str[:120]} — retrying in {wait}s")
-            #     time.sleep(wait)
     raise RuntimeError(f"API call failed after {MAX_RETRIES} attempts: {last_error}")
 
-
 def flatten_tagged(tagged: dict, project: dict) -> dict:
-    """
-    Converts one LLM-returned tagged object into a flat dict matching csv_columns.
-    Features, application_type, and technology_modifiers are sparse (only
-    non-zero keys returned) — missing ones default to 0.
-    Numeric/boolean/enum are always returned in full by the LLM.
-    """
     row = {
         "project_id": project["project_id"],
         "title": project["title"],
@@ -354,11 +395,10 @@ def flatten_tagged(tagged: dict, project: dict) -> dict:
     return row
 
 
-def write_rows(rows: list[dict], first_write: bool):
-    """Append rows to the CSV. Writes the header only on first_write."""
+def write_rows(rows: list[dict], output_path: Path, first_write: bool):
     STATE_DIR.mkdir(exist_ok=True)
     mode = "w" if first_write else "a"
-    with open(OUTPUT_PATH, mode, newline="", encoding="utf-8") as f:
+    with open(output_path, mode, newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=TAXONOMY["csv_columns"])
         if first_write:
             writer.writeheader()
@@ -440,7 +480,7 @@ def fetch_projects(
 # ---------------------------------------------------------------------------
 # Core tagging logic
 # ---------------------------------------------------------------------------
-def tag_batch(batch: list[dict]) -> dict:
+def tag_batch(batch: list[dict], worker_tag: str = "") -> dict:
     user_content = (
         f"Tag these {len(batch)} projects:\n\n"
         + json.dumps(
@@ -457,7 +497,7 @@ def tag_batch(batch: list[dict]) -> dict:
         )
     )
 
-    raw = call_llm(user_content)
+    raw = call_llm(user_content, worker_tag=worker_tag)
 
     try:
         tagged_list = extract_json(raw)
@@ -471,10 +511,32 @@ def tag_batch(batch: list[dict]) -> dict:
 
 
 # ---------------------------------------------------------------------------
-# Main orchestration
+# Main orchestration (single worker)
 # ---------------------------------------------------------------------------
-def run(organization_name: str | None, limit: int | None):
-    progress = load_json(PROGRESS_PATH, default={
+def run(
+    organization_name: str | None,
+    limit: int | None,
+    key_pool: list[str] | None = None,
+    worker_id: int | None = None,
+    num_workers: int = 1,
+):
+    worker_tag = f"w{worker_id}" if worker_id is not None else ""
+    suffix = f"_{worker_id}" if worker_id is not None else ""
+    progress_path = STATE_DIR / f"progress{suffix}.json"
+    output_path = STATE_DIR / f"tagged_projects{suffix}.csv"
+
+    init_worker_client(key_pool or ALL_KEYS)
+
+    try:
+        _run_body(organization_name, limit, worker_id, num_workers,
+                   worker_tag, progress_path, output_path)
+    finally:
+        _save_call_timing(worker_id)
+
+
+def _run_body(organization_name, limit, worker_id, num_workers,
+              worker_tag, progress_path, output_path):
+    progress = load_json(progress_path, default={
         "last_created_at": None,
         "projects_tagged": 0,
         "batches_completed": 0,
@@ -483,32 +545,45 @@ def run(organization_name: str | None, limit: int | None):
     after_created_at = progress["last_created_at"]
     first_write = after_created_at is None
 
+    prefix = f"[{worker_tag}] " if worker_tag else ""
     if after_created_at:
-        print(f"↻ Resuming after {after_created_at} ({progress['projects_tagged']} projects already tagged)")
+        print(f"{prefix}↻ Resuming after {after_created_at} ({progress['projects_tagged']} projects already tagged)")
 
-    projects = fetch_projects(after_created_at, organization_name, limit)
-    total = len(projects)
-    print(f"📦 {total} projects to tag"
+    all_projects = fetch_projects(None, organization_name, None)
+
+    if num_workers > 1:
+        shard = [p for i, p in enumerate(all_projects) if i % num_workers == worker_id]
+    else:
+        shard = all_projects
+
+    if after_created_at:
+        shard = [p for p in shard if p["created_at"] > after_created_at]
+
+    if limit:
+        shard = shard[:limit]
+
+    total = len(shard)
+    print(f"{prefix}📦 {total} projects to tag"
           + (f" (filtered to {organization_name})" if organization_name else ""))
 
     if total == 0:
-        print("✅ Nothing to do.")
+        print(f"{prefix}✅ Nothing to do.")
         return
 
     for batch_start in range(0, total, BATCH_SIZE):
-        batch = projects[batch_start: batch_start + BATCH_SIZE]
+        batch = shard[batch_start: batch_start + BATCH_SIZE]
         batch_num = batch_start // BATCH_SIZE + 1
         total_batches = (total + BATCH_SIZE - 1) // BATCH_SIZE
 
-        print(f"\n--- Batch {batch_num}/{total_batches} ({len(batch)} projects) ---")
+        print(f"\n{prefix}--- Batch {batch_num}/{total_batches} ({len(batch)} projects) ---")
         for p in batch:
-            print(f"   {p['title'][:60]}")
+            print(f"{prefix}   {p['title'][:60]}")
 
         try:
-            tagged_by_id = tag_batch(batch)
+            tagged_by_id = tag_batch(batch, worker_tag=worker_tag)
         except Exception as e:
-            print(f"❌ Batch {batch_num} failed permanently: {e}")
-            print("   Progress NOT advanced. Re-run to retry this batch.")
+            print(f"{prefix}❌ Batch {batch_num} failed permanently: {e}")
+            print(f"{prefix}   Progress NOT advanced. Re-run to retry this batch.")
             raise
 
         rows = []
@@ -516,24 +591,135 @@ def run(organization_name: str | None, limit: int | None):
         for p in batch:
             pid = p["project_id"]
             if pid not in tagged_by_id:
-                print(f"   ⚠️  LLM did not return a result for project {pid} ({p['title'][:40]}) — skipping")
+                print(f"{prefix}   ⚠️  LLM did not return a result for project {pid} ({p['title'][:40]}) — skipping")
                 continue
             row = flatten_tagged(tagged_by_id[pid], p)
             rows.append(row)
             last_created_at = p["created_at"]
 
         if rows:
-            write_rows(rows, first_write=first_write)
+            write_rows(rows, output_path, first_write=first_write)
             first_write = False
 
         progress["last_created_at"] = last_created_at
         progress["projects_tagged"] += len(rows)
         progress["batches_completed"] += 1
-        save_json(PROGRESS_PATH, progress)
+        save_json(progress_path, progress)
 
-        print(f"   ✅ {len(rows)} rows written (total so far: {progress['projects_tagged']})")
+        print(f"{prefix}   ✅ {len(rows)} rows written (total so far: {progress['projects_tagged']})")
 
-    print(f"\n✅ Done. {progress['projects_tagged']} projects tagged → {OUTPUT_PATH}")
+    print(f"\n{prefix}✅ Done. {progress['projects_tagged']} projects tagged → {output_path}")
+
+def _worker_entry(worker_id, num_workers, key_pool, organization_name, limit):
+    run(
+        organization_name=organization_name,
+        limit=limit,
+        key_pool=key_pool,
+        worker_id=worker_id,
+        num_workers=num_workers,
+    )
+
+def _print_aggregate_timing(para: int):
+    all_durations = []
+    for i in range(para):
+        path = STATE_DIR / f"call_timing_{i}.json"
+        data = load_json(path, default=None)
+        if data and data.get("durations"):
+            all_durations.extend(data["durations"])
+
+    if not all_durations:
+        return
+
+    avg = sum(all_durations) / len(all_durations)
+    print(f"\n⏱  Aggregate across {para} workers: {len(all_durations)} calls, "
+          f"avg response time {avg:.2f}s, total LLM time {sum(all_durations):.2f}s")
+
+def merge_worker_outputs(para: int, final_path: Path = STATE_DIR / "tagged_projects.csv"):
+    writer = None
+    rows_written = 0
+    with open(final_path, "w", newline="", encoding="utf-8") as out_f:
+        for i in range(para):
+            part = STATE_DIR / f"tagged_projects_{i}.csv"
+            if not part.exists():
+                continue
+            with open(part, newline="", encoding="utf-8") as in_f:
+                reader = csv.DictReader(in_f)
+                if reader.fieldnames is None:
+                    continue
+                if writer is None:
+                    writer = csv.DictWriter(out_f, fieldnames=reader.fieldnames)
+                    writer.writeheader()
+                for row in reader:
+                    writer.writerow(row)
+                    rows_written += 1
+    if writer is not None:
+        print(f"✅ Merged {para} worker outputs → {final_path} ({rows_written} rows)")
+    else:
+        print("⚠️  No worker output files found to merge — nothing written.")
+
+def run_parallel(organization_name: str | None, limit: int | None, para: int):
+    key_pools = get_key_pools(para)
+    print(f"🧵 Launching {para} parallel workers")
+    for i, pool in enumerate(key_pools):
+        print(f"   worker {i}: {len(pool)} key(s) starting with ...{pool[0][-4:]}")
+
+    procs = []
+    for i in range(para):
+        p = multiprocessing.Process(
+            target=_worker_entry,
+            args=(i, para, key_pools[i], organization_name, limit),
+        )
+        p.start()
+        procs.append(p)
+
+    def _handle_sigint(signum, frame):
+        print("\n🛑 Interrupt received — terminating workers, will merge partial output...")
+        for p in procs:
+            if p.is_alive():
+                p.terminate()
+        for p in procs:
+            p.join()
+        merge_worker_outputs(para)
+        sys.exit(130)
+
+    old_handler = signal.signal(signal.SIGINT, _handle_sigint)
+
+    try:
+        exit_codes = []
+        for p in procs:
+            p.join()
+            exit_codes.append(p.exitcode)
+
+        failed = [i for i, code in enumerate(exit_codes) if code != 0]
+        if failed:
+            print(f"⚠️  Worker(s) {failed} exited with errors. Merging partial output anyway.")
+        else:
+            print("✅ All workers finished cleanly.")
+    finally:
+        signal.signal(signal.SIGINT, old_handler)
+        merge_worker_outputs(para)
+        _print_aggregate_timing(para)
+
+    if failed:
+        raise RuntimeError(f"Worker(s) {failed} failed. Exit codes: {exit_codes}")
+
+def merge_worker_outputs(para: int, final_path: Path = STATE_DIR / "tagged_projects.csv"):
+    """Optional helper: concatenate per-worker CSVs into one file."""
+    first_write = True
+    with open(final_path, "w", newline="", encoding="utf-8") as out_f:
+        writer = None
+        for i in range(para):
+            part = STATE_DIR / f"tagged_projects_{i}.csv"
+            if not part.exists():
+                continue
+            with open(part, newline="", encoding="utf-8") as in_f:
+                reader = csv.DictReader(in_f)
+                if writer is None:
+                    writer = csv.DictWriter(out_f, fieldnames=reader.fieldnames)
+                    writer.writeheader()
+                for row in reader:
+                    writer.writerow(row)
+    print(f"✅ Merged {para} worker outputs → {final_path}")
 
 
 if __name__ == "__main__":
@@ -541,7 +727,21 @@ if __name__ == "__main__":
     parser.add_argument("--organization", type=str, default=None,
                         help="Filter to one organization by name (e.g. 'Karlancer')")
     parser.add_argument("--limit", type=int, default=None,
-                        help="Max number of projects to tag in this run")
+                        help="Max number of projects to tag in this run (applied per-worker when --para > 1)")
+    parser.add_argument("--para", type=int, default=1,
+                        help="Degree of parallelism — number of worker processes, each with its own API key subset")
+    parser.add_argument("--merge", action="store_true",
+                        help="Only merge existing per-worker CSVs into tagged_projects.csv (no tagging run)")
     args = parser.parse_args()
 
-    run(args.organization, args.limit)
+    if args.merge:
+        merge_worker_outputs(args.para)
+        _print_aggregate_timing(args.para)
+    elif args.para > 1:
+        run_parallel(args.organization, args.limit, args.para)
+    else:
+        try:
+            run(args.organization, args.limit)
+        except KeyboardInterrupt:
+            print("\n🛑 Interrupted — partial progress/output already saved incrementally.")
+            sys.exit(130)
