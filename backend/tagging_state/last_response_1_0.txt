@@ -1,0 +1,209 @@
+[
+  {
+    "project_id": "0a02a318-308d-4f18-b4cf-f13ee0d65bf9",
+    "features": {
+      "Dashboard": 3,
+      "Content Management": 2,
+      "Administration Panel": 1,
+      "Responsive Design": 3,
+      "SEO": 1,
+      "User Profiles": 2,
+      "User Management": 1,
+      "Web Application": 1
+    },
+    "application_type": {
+      "cms": 1,
+      "website": 1
+    },
+    "technology_modifiers": {},
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 4,
+      "estimated_entities": 3
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "medium",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "61e35fdd-8e15-47e3-a306-b43bd9aea72a",
+    "features": {
+      "Search": 5,
+      "Filtering & Sorting": 2
+    },
+    "application_type": {
+      "website": 1,
+      "cms": 1
+    },
+    "technology_modifiers": {
+      "WordPress": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 1,
+      "estimated_entities": 1
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "maintenance",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "8d5203f8-3b54-407b-9f3e-f03d773ec434",
+    "features": {
+      "External API Integration": 5,
+      "Workflow Automation": 4,
+      "Forms & Data Collection": 3,
+      "Plugin / Extension System": 4
+    },
+    "application_type": {
+      "web_application": 1,
+      "other": 1
+    },
+    "technology_modifiers": {
+      "WordPress": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 1,
+      "estimated_screens": 1,
+      "estimated_entities": 2
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "medium",
+      "data_volume": "small",
+      "integration_complexity": "medium",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "c62e542b-a961-49f8-9a7d-ae3eaaaf6de3",
+    "features": {
+      "Forms & Data Collection": 5,
+      "Email Services": 5,
+      "Administration Panel": 1
+    },
+    "application_type": {
+      "web_application": 1
+    },
+    "technology_modifiers": {
+      "WordPress": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 1,
+      "estimated_screens": 1,
+      "estimated_entities": 1
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "75466842-5599-4d2f-a2e0-9ba4698c7da0",
+    "features": {
+      "Messaging & Chat": 5,
+      "Forms & Data Collection": 3,
+      "User Management": 2,
+      "Notifications": 3,
+      "Map & Geolocation Integration": 2,
+      "Plugin / Extension System": 4,
+      "Marketplace": 2,
+      "Filtering & Sorting": 2
+    },
+    "application_type": {
+      "web_application": 1,
+      "marketplace": 1
+    },
+    "technology_modifiers": {
+      "WordPress": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 3,
+      "estimated_entities": 4
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "maintenance",
+      "ai_level": "none",
+      "business_logic": "medium",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "medium",
+      "algorithmic_complexity": "low"
+    }
+  }
+]

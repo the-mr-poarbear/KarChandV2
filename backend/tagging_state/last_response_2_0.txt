@@ -1,0 +1,213 @@
+```json
+[
+  {
+    "project_id": "e5269bb8-c133-4ee5-95b6-e4abb4d1581a",
+    "features": {
+      "Authentication": 4,
+      "User Management": 4,
+      "User Profiles": 3,
+      "Forms & Data Collection": 2,
+      "Payment Processing": 4,
+      "Subscription Management": 4,
+      "External API Integration": 3,
+      "Payment Gateway Integration": 5,
+      "Security": 4,
+      "Web Application": 1
+    },
+    "application_type": {
+      "web_application": 1,
+      "financial_system": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 1,
+      "estimated_screens": 6,
+      "estimated_entities": 5
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "medium",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "42d955e1-ca45-42f6-b115-996c1d01fb18",
+    "features": {
+      "Forms & Data Collection": 4,
+      "Background Jobs": 4,
+      "Bots & Automation": 5,
+      "Desktop Application": 1
+    },
+    "application_type": {
+      "desktop_application": 1,
+      "automation_system": 1,
+      "other": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 2,
+      "estimated_entities": 3
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 0,
+      "offline": 1,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "medium",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "2576966f-516e-41e0-8efe-8169b4d53686",
+    "features": {
+      "Task Management": 2,
+      "External API Integration": 3,
+      "Bots & Automation": 4
+    },
+    "application_type": {
+      "automation_system": 1,
+      "other": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 1,
+      "estimated_screens": 1,
+      "estimated_entities": 2
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 0,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 1,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "maintenance",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "64322388-8994-43ee-99e9-1a140090fada",
+    "features": {
+      "Search": 4,
+      "Filtering & Sorting": 4,
+      "Product Catalog": 3,
+      "External API Integration": 4,
+      "Security": 3,
+      "Infrastructure & Operations": 4,
+      "Web Application": 1,
+      "Mobile Application": 1
+    },
+    "application_type": {
+      "web_application": 1,
+      "api_backend": 1,
+      "ecommerce": 1,
+      "mobile_application": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 5,
+      "estimated_entities": 4
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 1,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 1,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 1
+    },
+    "enum_modifiers": {
+      "project_type": "bugfix",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "medium",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "1d3c873a-0091-441a-8926-6c4fb19655a9",
+    "features": {
+      "Search": 3,
+      "Filtering & Sorting": 4,
+      "Import & Export": 4,
+      "External API Integration": 4,
+      "Map & Geolocation Integration": 4,
+      "Web Scraping & Crawling": 5,
+      "Bots & Automation": 5,
+      "Web Application": 1
+    },
+    "application_type": {
+      "web_application": 1,
+      "automation_system": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 1,
+      "estimated_screens": 2,
+      "estimated_entities": 3
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 1,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "medium",
+      "data_volume": "small",
+      "integration_complexity": "medium",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "medium"
+    }
+  }
+]
+```

@@ -1,0 +1,226 @@
+```json
+[
+  {
+    "project_id": "42b400dc-97aa-466e-b01d-0031de0dd872",
+    "features": {
+      "Authentication": 2,
+      "Administration Panel": 3,
+      "Dashboard": 2,
+      "Monitoring & Logging": 2
+    },
+    "application_type": {
+      "web_application": 1,
+      "ecommerce": 1,
+      "cms": 1
+    },
+    "technology_modifiers": {
+      "WordPress": 1,
+      "WooCommerce": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 1,
+      "estimated_entities": 0
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 1,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "bugfix",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "3f3abd2f-45b1-4485-b1d0-269b1a2dded8",
+    "features": {
+      "Responsive Design": 4,
+      "Offline Support": 4,
+      "Web Application": 5
+    },
+    "application_type": {
+      "web_application": 1,
+      "mobile_application": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 50,
+      "estimated_entities": 0
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 1,
+      "web": 1,
+      "offline": 1,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 1
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "medium",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "da3d1f1d-06af-42b7-9fe9-0cb7b79a4984",
+    "features": {
+      "Content Management": 2,
+      "Responsive Design": 5,
+      "Settings & Configuration": 2,
+      "Product Catalog": 2,
+      "SEO": 1
+    },
+    "application_type": {
+      "website": 1,
+      "web_application": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 8,
+      "estimated_entities": 3
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 1,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "maintenance",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "medium",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "3e7eeec2-c795-4b31-bbd9-3c3e03185e39",
+    "features": {
+      " Administration Panel": 5,
+      "Reporting": 5,
+      "Inventory Management": 5,
+      "Import & Export": 5,
+      "Shopping Cart & Checkout": 5,
+      "Order Management": 5,
+      "Caching": 5,
+      "Dashboard": 1,
+      "Content Management": 1,
+      "Media Management": 1,
+      "Forms & Data Collection": 3,
+      "Product Catalog": 2,
+      "Print & Labels": 5
+    },
+    "application_type": {
+      "web_application": 1,
+      "ecommerce": 1
+    },
+    "technology_modifiers": {
+      "WordPress": 1,
+      "WooCommerce": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 6,
+      "estimated_entities": 4
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 1,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "maintenance",
+      "ai_level": "none",
+      "business_logic": "medium",
+      "data_volume": "medium",
+      "integration_complexity": "low",
+      "ui_complexity": "medium",
+      "algorithmic_complexity": "medium"
+    }
+  },
+  {
+    "project_id": "a320df36-ea7f-4789-94fb-becaafbe83c1",
+    "features": {
+      "User Management": 5,
+      "User Profiles": 5,
+      "Forms & Data Collection": 5,
+      "Workflow Automation": 5,
+      "Approval Workflow": 5,
+      "Dashboard": 5,
+      "Mobile Application": 5
+    },
+    "application_type": {
+      "web_application": 1,
+      "mobile_application": 1,
+      "crm": 1,
+      "financial_system": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 2,
+      "estimated_screens": 12,
+      "estimated_entities": 4
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 1,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 1
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "high",
+      "data_volume": "small",
+      "integration_complexity": "medium",
+      "ui_complexity": "high",
+      "algorithmic_complexity": "low"
+    }
+  }
+]
+```

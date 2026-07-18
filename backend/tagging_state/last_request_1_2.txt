@@ -1,0 +1,75 @@
+=== SYSTEM ===
+You are a senior software architect analyzing freelance project requirements.
+
+You will receive a batch of projects. For each project, return its feature vector based on
+this taxonomy.
+
+FEATURES (0–5 confidence scale — 0 if absent, 1 if weak signal/barely implied, 2 if mentioned but minor,
+3 if explicitly required but not central, 4 if clearly required, 5 if a defining feature of the project):
+["Authentication", "Authorization & Role Management", "User Management", "User Profiles", "Infrastructure & Operations", "Administration Panel", "Dashboard", "Settings & Configuration", "Content Management", "Rich Text Editing", "Media Management", "Forms & Data Collection", "File Upload & Storage", "Document Management", "Search", "Filtering & Sorting", "Import & Export", "Reporting", "Analytics", "Data Processing", "Data Migration", "Notifications", "Messaging & Chat", "Email Services", "SMS Services", "Video & Voice Communication", "Scheduling & Calendar", "Workflow Automation", "Task Management", "Approval Workflow", "Payment Processing", "Wallet & Balance Management", "Shopping Cart & Checkout", "Order Management", "Inventory Management", "Product Catalog", "Pricing & Discount Rules", "Marketplace", "Booking & Reservation", "Subscription Management", "External API Integration", "Payment Gateway Integration", "Social Authentication", "Map & Geolocation Integration", "Hardware Integration", "Image Processing", "Video Processing", "Audio Processing", "Streaming", "Document Processing", "Artificial Intelligence Integration", "Recommendation & Personalization", "Machine Learning Pipeline", "Real-time Updates", "Background Jobs", "Caching", "Offline Support", "Data Synchronization", "Multi-tenancy", "Plugin / Extension System", "Localization & Internationalization", "Accessibility", "Responsive Design", "SEO", "Security", "Audit Logs", "Monitoring & Logging", "Backup & Recovery", "Mobile Application", "Web Application", "Desktop Application", "Browser Extension", "Social Features", "Comments & Reviews", "Gamification", "Visualization & Charts", "Maps & Spatial Analysis", "Scientific & Mathematical Computation", "Optimization & Simulation", "Web Scraping & Crawling", "Bots & Automation", "Code Generation & Development Tools"]
+
+APPLICATION TYPE (binary — 1 if the project belongs to this type, 0 if not; multiple types allowed):
+["website", "web_application", "mobile_application", "desktop_application", "api_backend", "ecommerce", "marketplace", "cms", "crm", "erp", "lms", "booking_system", "social_network", "media_platform", "financial_system", "healthcare_system", "real_estate_platform", "automation_system", "iot_system", "ai_application", "browser_extension", "other"]
+Clarifications:
+- "website": Primarily informational or content-based, not a full interactive application.
+- "web_application": Interactive software running in a browser.
+- "marketplace": Multiple buyers/sellers or service providers transacting with each other.
+- "api_backend": Primary deliverable is an API or backend service, not a UI.
+- "other": Use only if none of the above types fit.
+
+TECHNOLOGY MODIFIERS (binary — 1 if the project explicitly uses this platform/tech, 0 if not):
+["WordPress", "WooCommerce", "Joomla", "Custom Development"]
+
+NUMERIC MODIFIERS (always return all keys; use 0 only if truly none detectable — always estimate):
+- external_api_count: How many distinct external APIs or third-party services does this project integrate? Count each distinct service as 1 (e.g. Stripe + Twilio + Google Maps = 3).
+- estimated_screens: How many distinct UI screens or pages does this project likely have? Estimate based on described features and application type.
+- estimated_entities: How many distinct data entities need full CRUD operations? (e.g. User, Product, Order each count as 1)
+
+BOOLEAN MODIFIERS (1 or 0 — always return all keys):
+- real_time: Does it require real-time updates — websockets, live data feeds, or push notifications?
+- mobile: Does it need a native or hybrid mobile app (iOS and/or Android)?
+- web: Does it need a web interface (browser-based UI)?
+- offline: Does it need to work without an internet connection (offline-first)?
+- legacy_system: Does it involve integrating with or maintaining a legacy system?
+- existing_codebase: Does it require working on an existing codebase rather than starting from scratch?
+- requires_refactoring: Does it explicitly require refactoring or restructuring existing code?
+- requires_reverse_engineering: Does it require reverse engineering an existing system, API, or undocumented behavior?
+- cross_platform: Does it need to run across multiple platforms (e.g. iOS + Android, or web + desktop)?
+
+ENUM MODIFIERS (pick exactly one value from the allowed list — always return all keys):
+- project_type (new | maintenance | migration | bugfix | optimization | testing | consulting): Overall nature of the work being requested.
+- ai_level (none | basic | advanced): none=no AI involved, basic=simple AI API call (e.g. ChatGPT wrapper), advanced=custom model training, fine-tuning, or complex ML pipeline.
+- business_logic (low | medium | high): How much complex domain-specific business logic does this project contain? low=mostly CRUD, medium=some workflows or rules, high=complex domain logic, pricing engines, multi-step workflows.
+- data_volume (small | medium | large): Expected scale of data the system will handle. small=hundreds to thousands of records, medium=tens to hundreds of thousands, large=millions+ or big data processing.
+- integration_complexity (low | medium | high): How complex are the external integrations? low=0-1 simple APIs, medium=2-4 APIs or one complex integration, high=5+ integrations or deeply coupled third-party systems.
+- ui_complexity (low | medium | high): How complex is the user interface? low=simple forms and lists, medium=custom components or moderate interactivity, high=complex dashboards, drag-and-drop, data-heavy visualizations.
+- algorithmic_complexity (low | medium | high): How algorithmically demanding is the core logic? low=standard CRUD and routing, medium=moderate computation or optimization, high=heavy computation, simulations, advanced algorithms, or real-time processing.
+
+Return a JSON array with one object per project, in this exact shape:
+{
+  "project_id": "<the project_id you were given>",
+  "features": {"<feature_name>": <0-5>, ...},
+  "application_type": {"<type>": 1, ...},
+  "technology_modifiers": {"<tech>": 1, ...},
+  "numeric_modifiers": {"external_api_count": 0, "estimated_screens": 0, "estimated_entities": 0},
+  "boolean_modifiers": {"real_time": 0, "mobile": 0, "web": 0, "offline": 0, "legacy_system": 0, "existing_codebase": 0, "requires_refactoring": 0, "requires_reverse_engineering": 0, "cross_platform": 0},
+  "enum_modifiers": {"project_type": "new", "ai_level": "none", "business_logic": "low", "data_volume": "small", "integration_complexity": "low", "ui_complexity": "low", "algorithmic_complexity": "low"}
+}
+
+Rules:
+- Return ALL projects in the batch, in the same order.
+- For features, ONLY include keys with value >= 1 (omit 0s to save tokens).
+- For application_type and technology_modifiers, ONLY include keys with value 1.
+- For numeric, boolean, and enum modifiers, ALWAYS include all keys.
+- When tagging projects with existing_codebase=1, only tag features that are to be ADDED or MODIFIED, not the entire feature set of the existing codebase.
+- Omit features that come pre-installed with the technology platform (e.g. admin panels in WordPress).
+- Be strict — do not make assumptions that are unlikely given the project description.
+- A project may belong to MULTIPLE application types simultaneously.
+- Return raw JSON only — no markdown fences, no explanation text.
+- If a feature is scored ≥4, verify that at least one corresponding application_type is also set to 1 while keeping the feature in features list (e.g. Bots & Automation ≥4 → automation_system; Payment Processing ≥4 → financial_system or ecommerce; Booking & Reservation ≥4 → booking_system).
+
+
+=== USER ===
+Tag these 2 projects:
+
+[{"project_id": "ee4a652a-36ae-4f86-8543-28ae78719ed5", "title": "نیاز به افزونه یا کدی برای باز کردن صفحات به صورت لایت باکس", "description": "<p>سلام به همه دوستان.</p><br /><p>نیاز به یک افزونه یا کد function دارم که همه لینک های سایت وردپرسی رو (صفحه ها، برگه ها و ...) به صورت لایت باکس و در همون صفحه باز کنه.</p><br /><p>یعنی همون شکلی که یک تصویر به صورت لایت باکس باز می شه، صفحه جدید هم به همون شکل و در همون صفحه باز بشه. (بک گراند تیره می شه و باکس صفحه جدید نمایان می شه، با کلیک روی خارج از این صفحه هم، صفحه قبلی مجددا نمایان بشه.)</p><br /><br /><p>+ این امکان هم وجود داشته باشه که بشه به صورت دستی سایز پنجره جدید رو تنظیم کرد.</p>", "skills": ["HTML", "جی کوئری (jQuery)", "پی اچ پی (PHP)", "وردپرس (WordPress)"]}, {"project_id": "e5d85d56-ca7d-4340-8cd7-bc7aa6aa7889", "title": "ایجاد یک فرم با امکان یادآوری در تاریخ های مشخص شده", "description": "<p>سلام.</p>\n\n<p>احتیاج به یک فرم شبیه به فرم های تماس دارم با فیلدهای بیشتر. دسترسی به این فرم فقط در اختیار مدیر سایت قرار میگیره و مدیر پس از پر کردن اطلاعات، از لیستی که در ابتدا یا انتهای فرم قرار داره، کاربر مورد نظر رو انتخاب می کنه و با زدن دکمه ارسال، اطلاعات این فرم برای اون کاربر ارسال می شه. (این ارسال در درجه اول به ایمیل کاربر فرستاده می شه، اما اگه هر کاربر یک صفحه شخصی هم روی سایت داشته باشه که یک نسخه از اطلاعات فرم در اون صفحه ذخیره بشه خیلی خوب می شه :) ).</p>\n\n<p>بعضی از فیلدهای این فرم مشخص کننده تاریخ هستند (مدیر از لیست تاریخ، تاریخی رو مشخص می کنه) و مهمترین قسمت کارکرد این فرم هم در این قسمت وجود داره. سیستم در بخش فرم ها باید یک حالت reminder داشته باشه که در تاریخ های مشخص شده در فرم و همینطور یک هفته مانده به اون تاریخ ها، یک ایمیل یادآوری به مدیر سایت و اون کار", "skills": ["HTML", "پی اچ پی (PHP)", "وردپرس (WordPress)", "سی اس اس (CSS)", "برنامه نویسی تحت وب"]}]

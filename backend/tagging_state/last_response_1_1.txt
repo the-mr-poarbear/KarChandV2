@@ -1,0 +1,221 @@
+[
+  {
+    "project_id": "6e9640ba-b781-4212-9b5d-a71ab117ec5f",
+    "features": {
+      "Administration Panel": 4,
+      "Content Management": 4,
+      "Scheduling & Calendar": 5,
+      "Responsive Design": 3,
+      "Mobile Application": 5
+    },
+    "application_type": {
+      "mobile_application": 1,
+      "other": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 5,
+      "estimated_entities": 3
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 1,
+      "web": 0,
+      "offline": 1,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 1
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "medium",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "medium",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "b86be1c9-258c-40a1-8079-47a3bbc9f7e0",
+    "features": {
+      "Authentication": 5,
+      "User Management": 3,
+      "User Profiles": 3,
+      "Administration Panel": 4,
+      "Content Management": 4,
+      "Media Management": 4,
+      "Forms & Data Collection": 4,
+      "Notifications": 3,
+      "Messaging & Chat": 4,
+      "Mobile Application": 5
+    },
+    "application_type": {
+      "mobile_application": 1,
+      "media_platform": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 10,
+      "estimated_entities": 5
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 1,
+      "web": 0,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "medium",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "medium",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "20ffb2c6-122a-45f4-8772-0958b974fdb7",
+    "features": {
+      "Administration Panel": 2,
+      "Notifications": 4,
+      "Email Services": 3,
+      "Order Management": 4,
+      "Hardware Integration": 5,
+      "Workflow Automation": 5
+    },
+    "application_type": {
+      "ecommerce": 1,
+      "automation_system": 1
+    },
+    "technology_modifiers": {
+      "WordPress": 1,
+      "WooCommerce": 1,
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 1,
+      "estimated_screens": 2,
+      "estimated_entities": 1
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "medium",
+      "data_volume": "small",
+      "integration_complexity": "medium",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "66b4e9ee-8f13-40be-a04d-3372f7b79aa3",
+    "features": {
+      "File Upload & Storage": 5,
+      "Image Processing": 5,
+      "Audio Processing": 5,
+      "Product Catalog": 3,
+      "Shopping Cart & Checkout": 4
+    },
+    "application_type": {
+      "web_application": 1,
+      "ecommerce": 1
+    },
+    "technology_modifiers": {
+      "WordPress": 1,
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 3,
+      "estimated_entities": 2
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "medium"
+    }
+  },
+  {
+    "project_id": "4e936a8c-117c-4afb-9f78-4df6c09c8988",
+    "features": {
+      "Forms & Data Collection": 4,
+      "File Upload & Storage": 5,
+      "Image Processing": 5,
+      "Audio Processing": 5
+    },
+    "application_type": {
+      "web_application": 1,
+      "other": 1
+    },
+    "technology_modifiers": {
+      "WordPress": 1,
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 2,
+      "estimated_entities": 1
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "medium"
+    }
+  }
+]

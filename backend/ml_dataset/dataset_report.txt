@@ -1,30 +1,32 @@
 ============================================================
 ML DATASET BUILD REPORT
 ============================================================
-Total rows (full dataset)  : 5,622
-Training rows (has budget) : 3,944 (70.2%)
+Total rows (full dataset)  : 14,836
+Training rows (has budget) : 8,623 (58.1%)
 Columns                    : 164
 
 --- USD rate coverage ---
-Projects with a usable USD rate: 5,622 (100.0%)
+Projects with a usable USD rate: 14,836 (100.0%)
 
 --- Budget stats (training set, USD) ---
 final_budget_usd:
-  median=1.74  mean=4.34  min=0.05  max=289.13
+  median=2.17  mean=6.11  min=0.05  max=680.78
 budget_min_usd:
-  median=0.69  mean=2.19  min=0.04  max=289.13
+  median=0.79  mean=3.04  min=0.04  max=362.49
 budget_max_usd:
-  median=2.84  mean=5.57  min=0.00  max=289.40
+  median=3.09  mean=7.60  min=0.00  max=1,127.28
 
 --- Organizations ---
+  Ponisha: 11,920
   Karlancer: 2,916
-  Ponisha: 2,706
 
 --- Missing value summary ---
-  final_budget: 1,678 (29.8%)
-  log_final_budget: 1,678 (29.8%)
-  final_budget_usd: 1,678 (29.8%)
-  log_final_budget_usd: 1,678 (29.8%)
+  final_budget: 6,137 (41.4%)
+  log_final_budget: 6,137 (41.4%)
+  final_budget_usd: 6,137 (41.4%)
+  log_final_budget_usd: 6,137 (41.4%)
+  duration: 2,168 (14.6%)
+  duration_days: 2,168 (14.6%)
   budget_range_ratio: 1 (0.0%)
 
 --- Recommended ML targets ---

@@ -1,0 +1,219 @@
+[
+  {
+    "project_id": "841a0431-5c0a-4eac-a5a7-74d8d142b50f",
+    "features": {
+      "Forms & Data Collection": 4,
+      "File Upload & Storage": 4,
+      "Search": 2,
+      "Filtering & Sorting": 2,
+      "Notifications": 5,
+      "SMS Services": 5,
+      "Audio Processing": 4,
+      "Administration Panel": 2,
+      "Security": 2
+    },
+    "application_type": {
+      "web_application": 1,
+      "automation_system": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 2,
+      "estimated_screens": 4,
+      "estimated_entities": 4
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "medium",
+      "data_volume": "small",
+      "integration_complexity": "medium",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "38f0783e-afdf-4892-b352-d3314ec3d1ce",
+    "features": {
+      "Dashboard": 2,
+      "Filtering & Sorting": 3,
+      "Reporting": 2,
+      "Payment Processing": 5,
+      "External API Integration": 4,
+      "Payment Gateway Integration": 4,
+      "Web Scraping & Crawling": 2,
+      "Responsive Design": 2
+    },
+    "application_type": {
+      "web_application": 1,
+      "financial_system": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 2,
+      "estimated_screens": 3,
+      "estimated_entities": 3
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 1,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 1
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "medium",
+      "data_volume": "small",
+      "integration_complexity": "medium",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "6b54dc6d-393b-4139-8a46-df4894a2bf92",
+    "features": {
+      "External API Integration": 4,
+      "Real-time Updates": 3
+    },
+    "application_type": {
+      "web_application": 1,
+      "api_backend": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 1,
+      "estimated_screens": 1,
+      "estimated_entities": 1
+    },
+    "boolean_modifiers": {
+      "real_time": 1,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "maintenance",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "medium",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "76ba4870-41a9-4ad4-9ec2-7167a50b1fe5",
+    "features": {
+      "Authentication": 4,
+      "User Management": 4,
+      "User Profiles": 3,
+      "Administration Panel": 4,
+      "Payment Processing": 3,
+      "External API Integration": 4,
+      "Social Features": 5
+    },
+    "application_type": {
+      "mobile_application": 1,
+      "social_network": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 2,
+      "estimated_screens": 10,
+      "estimated_entities": 5
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 1,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "medium",
+      "data_volume": "medium",
+      "integration_complexity": "medium",
+      "ui_complexity": "medium",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "dc6b461d-b849-4951-b6a4-153964e48849",
+    "features": {
+      "Forms & Data Collection": 3,
+      "File Upload & Storage": 3,
+      "Data Processing": 4,
+      "Import & Export": 4,
+      "Web Scraping & Crawling": 5,
+      "Bots & Automation": 4
+    },
+    "application_type": {
+      "automation_system": 1,
+      "other": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 1,
+      "estimated_screens": 1,
+      "estimated_entities": 1
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 0,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 1,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "medium",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "medium"
+    }
+  }
+]

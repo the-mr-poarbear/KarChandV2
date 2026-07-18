@@ -1,5 +1,8 @@
 {
-  "last_created_at": "2026-06-27T10:26:55.846167",
-  "projects_tagged": 6116,
-  "batches_completed": 1227
+  "last_created_at": "2026-07-05T21:52:54.700238",
+  "projects_tagged": 19663,
+  "batches_completed": 27971,
+  "process_batch_progress": {},
+  "last_run_para_degree": 4,
+  "last_run_local_para_degree": 4
 }

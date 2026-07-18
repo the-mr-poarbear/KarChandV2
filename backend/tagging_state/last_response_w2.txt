@@ -1,0 +1,241 @@
+[
+  {
+    "project_id": "fbcb3295-822a-4338-8685-d22969da4969",
+    "features": {
+      "User Profiles": 2,
+      "Media Management": 3,
+      "Filtering & Sorting": 4,
+      "Comments & Reviews": 5,
+      "Search": 2,
+      "Responsive Design": 5,
+      "Web Application": 5
+    },
+    "application_type": {
+      "web_application": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 4,
+      "estimated_entities": 3
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 1,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 1
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "7e8a02e4-8e41-456f-baf3-da6bd546a39b",
+    "features": {
+      "Authentication": 3,
+      "Authorization & Role Management": 2,
+      "User Management": 2,
+      "Infrastructure & Operations": 5,
+      "Dashboard": 2,
+      "Workflow Automation": 3,
+      "Task Management": 3,
+      "Booking & Reservation": 4,
+      "Payment Processing": 3,
+      "Order Management": 3,
+      "External API Integration": 3,
+      "Payment Gateway Integration": 3,
+      "Artificial Intelligence Integration": 2,
+      "Multi-tenancy": 2
+    },
+    "application_type": {
+      "web_application": 1,
+      "mobile_application": 1,
+      "marketplace": 1,
+      "crm": 1,
+      "booking_system": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 3,
+      "estimated_screens": 40,
+      "estimated_entities": 15
+    },
+    "boolean_modifiers": {
+      "real_time": 1,
+      "mobile": 1,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 1
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "advanced",
+      "business_logic": "high",
+      "data_volume": "medium",
+      "integration_complexity": "high",
+      "ui_complexity": "high",
+      "algorithmic_complexity": "medium"
+    }
+  },
+  {
+    "project_id": "fe83caa1-613f-4946-b480-7a7cc960abd5",
+    "features": {
+      "Content Management": 3,
+      "Media Management": 2,
+      "File Upload & Storage": 3,
+      "Document Management": 1,
+      "Import & Export": 3,
+      "External API Integration": 4,
+      "SEO": 3,
+      "Web Scraping & Crawling": 4,
+      "Bots & Automation": 5,
+      "Image Processing": 2
+    },
+    "application_type": {
+      "cms": 1,
+      "automation_system": 1,
+      "media_platform": 1
+    },
+    "technology_modifiers": {
+      "WordPress": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 2,
+      "estimated_screens": 2,
+      "estimated_entities": 2
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 0,
+      "offline": 0,
+      "legacy_system": 1,
+      "existing_codebase": 1,
+      "requires_refactoring": 1,
+      "requires_reverse_engineering": 1,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "bugfix",
+      "ai_level": "none",
+      "business_logic": "medium",
+      "data_volume": "medium",
+      "integration_complexity": "medium",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "c9d0a73c-2eb0-44f2-9e6d-e81779135fc0",
+    "features": {
+      "Shopping Cart & Checkout": 4,
+      "Order Management": 3,
+      "Product Catalog": 5,
+      "Pricing & Discount Rules": 2,
+      "Payment Gateway Integration": 3,
+      "Search": 3,
+      "Filtering & Sorting": 3,
+      "Responsive Design": 5,
+      "Web Application": 4,
+      "SEO": 2
+    },
+    "application_type": {
+      "web_application": 1,
+      "ecommerce": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 1,
+      "estimated_screens": 10,
+      "estimated_entities": 5
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "medium",
+      "data_volume": "medium",
+      "integration_complexity": "low",
+      "ui_complexity": "medium",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "a2b155da-e68b-4e1b-9e91-a1fb4a884dce",
+    "features": {
+      "User Management": 3,
+      "Forms & Data Collection": 4,
+      "Payment Processing": 2,
+      "External API Integration": 3,
+      "Email Services": 2,
+      "SMS Services": 2,
+      "Notifications": 3,
+      "Responsive Design": 4,
+      "Web Application": 3
+    },
+    "application_type": {
+      "website": 1,
+      "web_application": 1,
+      "lms": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 2,
+      "estimated_screens": 5,
+      "estimated_entities": 3
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  }
+]

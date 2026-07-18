@@ -1,0 +1,203 @@
+[
+  {
+    "project_id": "44c5e163-b014-4dbf-9bd7-6c63c35bee78",
+    "features": {
+      "Content Management": 4,
+      "Media Management": 4,
+      "Data Migration": 5,
+      "Import & Export": 4
+    },
+    "application_type": {
+      "cms": 1
+    },
+    "technology_modifiers": {
+      "WordPress": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 1,
+      "estimated_entities": 2
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 1,
+      "existing_codebase": 1,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "migration",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "8e31b8cb-b372-489d-bfdb-fa957da796ec",
+    "features": {
+      "Data Processing": 3
+    },
+    "application_type": {
+      "web_application": 1
+    },
+    "technology_modifiers": {
+      "WordPress": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 1,
+      "estimated_entities": 1
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 1,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "bugfix",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "e74cd188-e95d-431f-bc63-1cc2a764552c",
+    "features": {
+      "Security": 4,
+      "Settings & Configuration": 3
+    },
+    "application_type": {
+      "desktop_application": 1,
+      "browser_extension": 1,
+      "other": 1
+    },
+    "technology_modifiers": {},
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 2,
+      "estimated_entities": 1
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 0,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "5b4cb281-dd7a-4350-a0c7-0a77e0309221",
+    "features": {
+      "Localization & Internationalization": 4,
+      "Payment Gateway Integration": 4,
+      "SMS Services": 4,
+      "Booking & Reservation": 4,
+      "User Management": 3,
+      "Notifications": 3,
+      "Email Services": 2
+    },
+    "application_type": {
+      "web_application": 1,
+      "booking_system": 1,
+      "healthcare_system": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 2,
+      "estimated_screens": 15,
+      "estimated_entities": 8
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "maintenance",
+      "ai_level": "none",
+      "business_logic": "medium",
+      "data_volume": "small",
+      "integration_complexity": "medium",
+      "ui_complexity": "medium",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "75ee8e14-2564-4eae-bfd5-1c1870eef4ca",
+    "features": {
+      "Payment Gateway Integration": 5,
+      "Subscription Management": 4,
+      "Order Management": 3,
+      "Reporting": 2
+    },
+    "application_type": {
+      "web_application": 1,
+      "financial_system": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 1,
+      "estimated_screens": 3,
+      "estimated_entities": 3
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "maintenance",
+      "ai_level": "none",
+      "business_logic": "medium",
+      "data_volume": "small",
+      "integration_complexity": "medium",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  }
+]

@@ -1,0 +1,229 @@
+[
+  {
+    "project_id": "e1655bc1-43f5-4f00-9e75-48055071af2c",
+    "features": {
+      "Responsive Design": 4,
+      "Web Application": 1,
+      "SEO": 2
+    },
+    "application_type": {
+      "website": 1
+    },
+    "technology_modifiers": {
+      "WordPress": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 4,
+      "estimated_entities": 0
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 1,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "maintenance",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "64b1895a-18f6-459c-911b-52d87e8c6fbd",
+    "features": {
+      "Authentication": 3,
+      "User Management": 3,
+      "User Profiles": 4,
+      "Marketplace": 5,
+      "Product Catalog": 4,
+      "Payment Processing": 4,
+      "Wallet & Balance Management": 4,
+      "Order Management": 3,
+      "Shopping Cart & Checkout": 3,
+      "Content Management": 3,
+      "Media Management": 2,
+      "Messaging & Chat": 3,
+      "Social Features": 1,
+      "Mobile Application": 4,
+      "Web Application": 4,
+      "Localization & Internationalization": 4,
+      "SEO": 4,
+      "Security": 4,
+      "Hardware Integration": 3,
+      "Image Processing": 3,
+      "Real-time Updates": 2
+    },
+    "application_type": {
+      "web_application": 1,
+      "mobile_application": 1,
+      "ecommerce": 1,
+      "marketplace": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 2,
+      "estimated_screens": 15,
+      "estimated_entities": 8
+    },
+    "boolean_modifiers": {
+      "real_time": 1,
+      "mobile": 1,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 1
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "high",
+      "data_volume": "medium",
+      "integration_complexity": "medium",
+      "ui_complexity": "high",
+      "algorithmic_complexity": "medium"
+    }
+  },
+  {
+    "project_id": "275b407f-4f80-4fbd-9457-7c9ac67cd2b2",
+    "features": {
+      "Authentication": 4,
+      "User Management": 4,
+      "Media Management": 4,
+      "Audio Processing": 3,
+      "Video Processing": 3,
+      "Image Processing": 2,
+      "Messaging & Chat": 4,
+      "Content Management": 4,
+      "Access Control": 4,
+      "Security": 4,
+      "Mobile Application": 5,
+      "Audit Logs": 3
+    },
+    "application_type": {
+      "mobile_application": 1,
+      "media_platform": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 5,
+      "estimated_entities": 4
+    },
+    "boolean_modifiers": {
+      "real_time": 1,
+      "mobile": 1,
+      "web": 0,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "medium",
+      "data_volume": "medium",
+      "integration_complexity": "low",
+      "ui_complexity": "medium",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "01614c5e-00e5-4b91-9259-82421fb48926",
+    "features": {
+      "User Management": 4,
+      "Data Migration": 4,
+      "Wallet & Balance Management": 2,
+      "Order Management": 1
+    },
+    "application_type": {
+      "web_application": 1
+    },
+    "technology_modifiers": {
+      "WordPress": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 0,
+      "estimated_entities": 3
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 1,
+      "existing_codebase": 1,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 1,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "maintenance",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "43f63c14-a140-4ed0-b5d7-67c6fc9987ab",
+    "features": {
+      "Localization & Internationalization": 4,
+      "Settings & Configuration": 2
+    },
+    "application_type": {
+      "web_application": 1
+    },
+    "technology_modifiers": {
+      "WordPress": 1,
+      "WooCommerce": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 0,
+      "estimated_entities": 0
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 1,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "maintenance",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  }
+]

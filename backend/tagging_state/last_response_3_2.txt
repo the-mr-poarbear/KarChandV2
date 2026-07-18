@@ -1,0 +1,84 @@
+[
+  {
+    "project_id": "e1a3ecf4-8754-44a8-98d8-785c888c8e19",
+    "features": {
+      "Web Application": 3,
+      "Security": 2
+    },
+    "application_type": {
+      "website": 1
+    },
+    "technology_modifiers": {
+      "WordPress": 1
+    },
+    "numeric_modifiers": {"external_api_count": 0, "estimated_screens": 2, "estimated_entities": 1},
+    "boolean_modifiers": {"real_time": 0, "mobile": 0, "web": 1, "offline": 0, "legacy_system": 1, "existing_codebase": 1, "requires_refactoring": 1, "requires_reverse_engineering": 0, "cross_platform": 0},
+    "enum_modifiers": {"project_type": "bugfix", "ai_level": "none", "business_logic": "low", "data_volume": "small", "integration_complexity": "low", "ui_complexity": "low", "algorithmic_complexity": "low"}
+  },
+  {
+    "project_id": "f1e5ab39-deb4-44aa-ba87-c5ef6ff6d0d6",
+    "features": {
+      "Infrastructure & Operations": 5,
+      "Settings & Configuration": 3,
+      "Monitoring & Logging": 2
+    },
+    "application_type": {
+      "other": 1
+    },
+    "technology_modifiers": {},
+    "numeric_modifiers": {"external_api_count": 0, "estimated_screens": 0, "estimated_entities": 0},
+    "boolean_modifiers": {"real_time": 0, "mobile": 0, "web": 0, "offline": 0, "legacy_system": 0, "existing_codebase": 0, "requires_refactoring": 0, "requires_reverse_engineering": 0, "cross_platform": 0},
+    "enum_modifiers": {"project_type": "new", "ai_level": "none", "business_logic": "low", "data_volume": "small", "integration_complexity": "low", "ui_complexity": "low", "algorithmic_complexity": "low"}
+  },
+  {
+    "project_id": "8e978d83-20cc-4653-9c62-806fbc70faa6",
+    "features": {
+      "Web Application": 4
+    },
+    "application_type": {
+      "mobile_application": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {"external_api_count": 0, "estimated_screens": 2, "estimated_entities": 1},
+    "boolean_modifiers": {"real_time": 0, "mobile": 1, "web": 1, "offline": 0, "legacy_system": 1, "existing_codebase": 1, "requires_refactoring": 0, "requires_reverse_engineering": 0, "cross_platform": 1},
+    "enum_modifiers": {"project_type": "new", "ai_level": "none", "business_logic": "low", "data_volume": "small", "integration_complexity": "low", "ui_complexity": "low", "algorithmic_complexity": "low"}
+  },
+  {
+    "project_id": "b7659735-6af6-46cd-b2b9-3b03c08cfc84",
+    "features": {
+      "Authentication": 3,
+      "Forms & Data Collection": 4,
+      "Web Application": 4,
+      "Offline Support": 5
+    },
+    "application_type": {
+      "web_application": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {"external_api_count": 0, "estimated_screens": 3, "estimated_entities": 1},
+    "boolean_modifiers": {"real_time": 0, "mobile": 0, "web": 1, "offline": 1, "legacy_system": 0, "existing_codebase": 0, "requires_refactoring": 0, "requires_reverse_engineering": 0, "cross_platform": 0},
+    "enum_modifiers": {"project_type": "new", "ai_level": "none", "business_logic": "low", "data_volume": "small", "integration_complexity": "low", "ui_complexity": "low", "algorithmic_complexity": "low"}
+  },
+  {
+    "project_id": "98be9e24-937e-46af-8098-cbe1ab1b50a6",
+    "features": {
+      "Scheduling & Calendar": 4,
+      "Booking & Reservation": 5,
+      "Localization & Internationalization": 5,
+      "Plugin / Extension System": 4
+    },
+    "application_type": {
+      "booking_system": 1
+    },
+    "technology_modifiers": {
+      "WordPress": 1
+    },
+    "numeric_modifiers": {"external_api_count": 0, "estimated_screens": 5, "estimated_entities": 3},
+    "boolean_modifiers": {"real_time": 0, "mobile": 0, "web": 1, "offline": 0, "legacy_system": 1, "existing_codebase": 1, "requires_refactoring": 1, "requires_reverse_engineering": 0, "cross_platform": 0},
+    "enum_modifiers": {"project_type": "maintenance", "ai_level": "none", "business_logic": "medium", "data_volume": "small", "integration_complexity": "low", "ui_complexity": "medium", "algorithmic_complexity": "medium"}
+  }
+]

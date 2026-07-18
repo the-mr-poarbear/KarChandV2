@@ -1,0 +1,206 @@
+```json
+[
+  {
+    "project_id": "f8a33e73-d0f8-4d03-9c9d-542f3d2178e8",
+    "features": {
+      "Data Synchronization": 5,
+      "Bots & Automation": 5,
+      "Background Jobs": 4,
+      "Audit Logs": 3,
+      "Web Scraping & Crawling": 4,
+      "External API Integration": 3,
+      "Monitoring & Logging": 3,
+      "Inventory Management": 4,
+      "Pricing & Discount Rules": 2
+    },
+    "application_type": {
+      "automation_system": 1
+    },
+    "technology_modifiers": {
+      "WordPress": 1,
+      "WooCommerce": 1,
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 2,
+      "estimated_screens": 1,
+      "estimated_entities": 2
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 1,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "medium",
+      "data_volume": "medium",
+      "integration_complexity": "medium",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "083cab78-a54d-4bd9-a197-394230ed74c8",
+    "features": {
+      "Plugin / Extension System": 4,
+      "Reporting": 4,
+      "Order Management": 3,
+      "Document Management": ,
+      "Import & Export": 2,
+      "Settings & Configuration": 3
+    },
+    "application_type": {
+      "ecommerce": 1,
+      "web_application": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 4,
+      "estimated_entities": 3
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "maintenance",
+      "ai_level": "none",
+      "business_logic": "medium",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "4976f069-f460-4bf2-bb93-077047ac353e",
+    "features": {
+      "Responsive Design": 4,
+      "SEO": 3,
+      "Product Catalog": 3,
+      "Shopping Cart & Checkout": 3
+    },
+    "application_type": {
+      "ecommerce": 1,
+      "website": 1
+    },
+    "technology_modifiers": {},
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 10,
+      "estimated_entities": 4
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 1,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "maintenance",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "medium",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "ea8abaaf-1d84-4ce2-8715-4f115870c448",
+    "features": {
+      "External API Integration": 4,
+      "Web Scraping & Crawling": 4,
+      "Messaging & Chat": 4,
+      "Bots & Automation": 3,
+      "Security": 3
+    },
+    "application_type": {
+      "api_backend": 1,
+      "automation_system": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 1,
+      "estimated_screens": 0,
+      "estimated_entities": 1
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 0,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 1,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "medium",
+      "data_volume": "small",
+      "integration_complexity": "high",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "medium"
+    }
+  },
+  {
+    "project_id": "4d6cac18-1a1f-47fc-a9e3-acc9e220b475",
+    "features": {},
+    "application_type": {},
+    "technology_modifiers": {},
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 5,
+      "estimated_entities": 4
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 0,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  }
+]
+```

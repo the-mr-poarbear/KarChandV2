@@ -1,0 +1,229 @@
+```json
+[
+  {
+    "project_id": "d1242462-e28e-4d02-a378-8174653f8856",
+    "features": {
+      "Content Management": 3,
+      "Search": 2,
+      "Responsive Design": 4,
+      "SEO": 4,
+      "Security": 2,
+      "Web Application": 1
+    },
+    "application_type": {
+      "website": 1
+    },
+    "technology_modifiers": {
+      "WordPress": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 5,
+      "estimated_entities": 2
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "medium",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "f18dc2d3-6a35-4166-bc70-001245b8fd89",
+    "features": {
+      "Authentication": 4,
+      "Authorization & Role Management": 4,
+      "User Management": 3,
+      "Administration Panel": 4,
+      "Settings & Configuration": 3,
+      "Content Management": 4,
+      "Media Management": 3,
+      "Video & Voice Communication": 3,
+      "Streaming": 4,
+      "Security": 5,
+      "Mobile Application": 5,
+      "Subscription Management": 4,
+      "Payment Processing": 4,
+      "Order Management": 3,
+      "External API Integration": 3,
+      "Payment Gateway Integration": 4,
+      "Localization & Internationalization": 2,
+      "Offline Support": 2,
+      "Real-time Updates": 2,
+      "Notifications": 3,
+      "Background Jobs": 2,
+      "File Upload & Storage": 3
+    },
+    "application_type": {
+      "mobile_application": 1,
+      "api_backend": 1,
+      "lms": 1
+    },
+    "technology_modifiers": {},
+    "numeric_modifiers": {
+      "external_api_count": 2,
+      "estimated_screens": 15,
+      "estimated_entities": 6
+    },
+    "boolean_modifiers": {
+      "real_time": 1,
+      "mobile": 1,
+      "web": 1,
+      "offline": 1,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 1
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "high",
+      "data_volume": "medium",
+      "integration_complexity": "medium",
+      "ui_complexity": "high",
+      "algorithmic_complexity": "medium"
+    }
+  },
+  {
+    "project_id": "ae4ad5ff-bece-4c02-a550-75f134744f44",
+    "features": {
+      "Content Management": 4,
+      "Social Features": 3,
+      "Comments & Reviews": 2,
+      "Shopping Cart & Checkout": 3,
+      "Product Catalog": 2,
+      "Order Management": 2,
+      "Responsive Design": 2
+    },
+    "application_type": {
+      "website": 1,
+      "ecommerce": 1,
+      "marketplace": 1
+    },
+    "technology_modifiers": {},
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 8,
+      "estimated_entities": 5
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "medium",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "medium",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "2706edb6-68f5-4f94-b1df-dac9711ea761",
+    "features": {
+      "Forms & Data Collection": 4,
+      "Shopping Cart & Checkout": 4,
+      "Order Management": 4,
+      "Payment Processing": 4,
+      "Payment Gateway Integration": 4,
+      "Email Services": 3,
+      "Administration Panel": 3,
+      "Inventory Management": 2,
+      "Product Catalog": 2
+    },
+    "application_type": {
+      "ecommerce": 1,
+      "web_application": 1
+    },
+    "technology_modifiers": {},
+    "numeric_modifiers": {
+      "external_api_count": 1,
+      "estimated_screens": 4,
+      "estimated_entities": 4
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "medium",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "e970c22b-a267-4ae7-a773-f6432cf50868",
+    "features": {
+      "Localization & Internationalization": 5,
+      "Content Management": 2
+    },
+    "application_type": {
+      "website": 1
+    },
+    "technology_modifiers": {
+      "WordPress": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 1,
+      "estimated_entities": 1
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "maintenance",
+      "ai_level": "basic",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  }
+]
+```

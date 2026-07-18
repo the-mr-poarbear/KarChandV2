@@ -7,27 +7,46 @@ Usage:
     python -m app.scripts.tag_projects
     python -m app.scripts.tag_projects --organization Karlancer
     python -m app.scripts.tag_projects --limit 500
-    python -m app.scripts.tag_projects --para 2
+    python -m app.scripts.tag_projects --para 4
+    python -m app.scripts.tag_projects --para 4 --local-para 2
 
-Resumes automatically if interrupted — projects are processed in
-created_at order, and progress tracks the last successfully tagged
-project's created_at timestamp, so a resume just continues from there.
+PARALLELISM MODEL
+------------------
+--para N          Splits your 4 API keys into N groups. Each group gets
+                   its own private key subset and only rotates within it
+                   on rate limit (e.g. --para 2 -> group 0 uses
+                   [KEY_1, KEY_2], group 1 uses [KEY_3, KEY_4]). If 4
+                   doesn't divide evenly by N (e.g. --para 3), each group
+                   still starts on a different key, but falls back to
+                   cycling through ALL 4 keys linearly on rate limit.
 
-With --para N > 1, work is sharded round-robin across N worker
-processes, each with its own progress/output file (progress_{i}.json,
-tagged_projects_{i}.csv) and its own subset of API keys. Run
-`merge_worker_outputs()` (or just concat the CSVs) once all workers finish.
+--local-para M     Within EACH group, spawns M sub-processes that all
+                   share that group's key pool and run concurrently
+                   (each with its own independent throttle timer). Total
+                   OS processes launched = N * M.
+
+All workers, no matter how many, read/write ONE shared tagged_projects.csv
+and ONE shared progress.json (both lock-protected across processes, AND
+retried on transient Windows file-lock errors like WinError 5). Batches
+are split round-robin across all N*M workers by batch index.
+progress.json records exactly how many batches each individual worker
+slot has completed, so a later run — even with a different
+--para/--local-para — can resume without re-tagging anything. As a
+safety net independent of that bookkeeping, every worker also skips any
+project_id it finds is already present in tagged_projects.csv before
+tagging it.
 
 The taxonomy (features, modifiers, descriptions, rules) is defined in
 taxonomy.json — edit that file to tune without touching this script.
 """
-import signal
-import sys
 import argparse
 import csv
 import json
 import multiprocessing
+import random
 import re
+import signal
+import sys
 import time
 from datetime import datetime
 from pathlib import Path
@@ -44,13 +63,19 @@ from app.models.organization import Organization
 # ---------------------------------------------------------------------------
 BATCH_SIZE = 5
 MAX_RETRIES = 3
-RETRY_BACKOFF_SECONDS = 5
 MIN_SECONDS_BETWEEN_CALLS = 6.5
-DEFAULT_TIMEOUT_RETRY_SECONDS = 125
 MODEL = "z-ai/glm-5.2"
 
 STATE_DIR = Path("tagging_state")
+PROGRESS_PATH = STATE_DIR / "progress.json"
+OUTPUT_PATH = STATE_DIR / "tagged_projects.csv"
 TAXONOMY_PATH = Path(__file__).parent.parent / "taxonomy/taxonomy.json"
+
+# Windows can transiently throw PermissionError / WinError 5 when a file
+# is briefly held by AV, indexing, or cloud-sync (OneDrive etc.) at the
+# exact moment we try to replace/append it. These control the retry.
+FILE_LOCK_MAX_ATTEMPTS = 10
+FILE_LOCK_BASE_DELAY = 0.05
 
 ALL_KEYS = [
     settings.LLM_API_KEY,
@@ -59,75 +84,71 @@ ALL_KEYS = [
     settings.LLM_API_KEY_4,
 ]
 
-# These are set per-process in `init_worker_client` / at module import time
-# for the non-parallel (--para 1) path.
+# Per-process globals. Each spawned process gets its OWN copy of these
+# (multiprocessing uses separate memory), so there's no cross-process
+# collision even though the names look "global".
 client = None
 KEY_POOL: list[str] = []
 _key_index = 0
 _last_call_time = 0.0
-
-
-
-# ---------------------------------------------------------------------------
-# Timing
-# ---------------------------------------------------------------------------
 _call_durations: list[float] = []
 
 
-def _record_call_duration(duration: float, worker_tag: str = ""):
-    global _call_durations
-    _call_durations.append(duration)
-    avg = sum(_call_durations) / len(_call_durations)
-    prefix = f"[{worker_tag}] " if worker_tag else ""
-    print(f"{prefix}⏱  response took {duration:.2f}s "
-          f"(avg over {len(_call_durations)} calls: {avg:.2f}s)")
-
-
-def _save_call_timing(worker_id: int | None):
-    suffix = f"_{worker_id}" if worker_id is not None else ""
-    path = STATE_DIR / f"call_timing{suffix}.json"
-    save_json(path, {
-        "count": len(_call_durations),
-        "total_seconds": sum(_call_durations),
-        "average_seconds": (sum(_call_durations) / len(_call_durations)) if _call_durations else 0,
-        "durations": _call_durations,
-    })
-
+# ---------------------------------------------------------------------------
+# Key pool splitting
+# ---------------------------------------------------------------------------
 def get_key_pools(para: int) -> list[list[str]]:
     """
-    Splits ALL_KEYS into `para` pools, one per worker.
+    Splits ALL_KEYS into `para` pools, one per key-group.
 
-    - If len(ALL_KEYS) is evenly divisible by `para` (para in 1, 2, 4),
-      each worker gets a private contiguous chunk of keys and only
-      switches within that chunk on rate limit.
-    - Otherwise (e.g. para=3), an even split isn't possible. Each worker
-      still starts on a distinct key (round-robin assigned), but its
-      switch-on-rate-limit fallback cycles through the FULL key list in
-      a fixed linear order, since there's no clean private subset.
+    - If len(ALL_KEYS) divides evenly by `para` (para in 1, 2, 4): each
+      group gets a private, non-overlapping chunk of keys.
+    - Otherwise (e.g. para=3): an even split isn't possible, so each
+      group starts on a different key, but its rate-limit fallback
+      cycles through the FULL 4-key list in a fixed linear order.
     """
     n = len(ALL_KEYS)
     if para <= 0:
         raise ValueError("--para must be >= 1")
-
     if n % para == 0:
         chunk = n // para
         return [ALL_KEYS[i * chunk:(i + 1) * chunk] for i in range(para)]
-
-    # Uneven split: fall back to "everyone shares the full linear list",
-    # just starting from a different offset per worker.
-    pools = []
-    for i in range(para):
-        rotated = ALL_KEYS[i % n:] + ALL_KEYS[:i % n]
-        pools.append(rotated)
-    return pools
+    return [ALL_KEYS[i % n:] + ALL_KEYS[:i % n] for i in range(para)]
 
 
 def init_worker_client(key_pool: list[str]):
-    """Call once per process before any call_llm() calls."""
+    """Must be called once at the start of every worker process."""
     global client, KEY_POOL, _key_index
     KEY_POOL = key_pool
     _key_index = 0
     client = OpenAI(base_url=settings.LLM_BASE_URL, api_key=KEY_POOL[0])
+
+
+# ---------------------------------------------------------------------------
+# File-lock-resilient write helper
+# ---------------------------------------------------------------------------
+def _retry_on_file_lock(fn, *, description: str = "file operation"):
+    """
+    Retries a file operation that can transiently fail with
+    PermissionError (WinError 5) or OSError when another process, AV
+    tool, or cloud-sync client briefly holds a handle on the file.
+    Uses exponential backoff with jitter. Raises the last error if all
+    attempts are exhausted.
+    """
+    last_error = None
+    for attempt in range(1, FILE_LOCK_MAX_ATTEMPTS + 1):
+        try:
+            return fn()
+        except (PermissionError, OSError) as e:
+            last_error = e
+            if attempt == FILE_LOCK_MAX_ATTEMPTS:
+                break
+            delay = FILE_LOCK_BASE_DELAY * (2 ** (attempt - 1)) + random.uniform(0, 0.05)
+            delay = min(delay, 3.0)
+            print(f"   ⏳ {description} locked (attempt {attempt}/{FILE_LOCK_MAX_ATTEMPTS}), "
+                  f"retrying in {delay:.2f}s: {e}")
+            time.sleep(delay)
+    raise RuntimeError(f"{description} failed after {FILE_LOCK_MAX_ATTEMPTS} attempts: {last_error}")
 
 
 # ---------------------------------------------------------------------------
@@ -139,44 +160,30 @@ def load_taxonomy(path: Path) -> dict:
 
 
 def build_derived(tx: dict) -> dict:
-    """
-    Pre-compute everything the script needs from the raw taxonomy dict:
-    flat lists for CSV headers, the prompt string, lookup dicts for
-    flatten_tagged. Called once at startup.
-    """
     features        = tx["features"]["values"]
     app_types       = tx["application_types"]["values"]
     app_definitions = tx["application_types"].get("definitions", {})
     tech_mods       = tx["technology_modifiers"]["values"]
-    numeric_fields  = tx["numeric_modifiers"]["fields"]   # {name: description}
-    boolean_fields  = tx["boolean_modifiers"]["fields"]   # {name: description}
-    enum_fields     = tx["enum_modifiers"]["fields"]       # {name: {values, description}}
+    numeric_fields  = tx["numeric_modifiers"]["fields"]
+    boolean_fields  = tx["boolean_modifiers"]["fields"]
+    enum_fields     = tx["enum_modifiers"]["fields"]
     rules           = tx["prompt_rules"]["rules"]
 
     csv_columns = (
         ["project_id", "title", "category", "organization", "created_at"]
-        + features
-        + app_types
-        + tech_mods
+        + features + app_types + tech_mods
         + list(numeric_fields.keys())
         + list(boolean_fields.keys())
         + list(enum_fields.keys())
     )
 
-    numeric_prompt_lines = "\n".join(
-        f"- {name}: {desc}" for name, desc in numeric_fields.items()
-    )
-    boolean_prompt_lines = "\n".join(
-        f"- {name}: {desc}" for name, desc in boolean_fields.items()
-    )
+    numeric_prompt_lines = "\n".join(f"- {name}: {desc}" for name, desc in numeric_fields.items())
+    boolean_prompt_lines = "\n".join(f"- {name}: {desc}" for name, desc in boolean_fields.items())
     enum_prompt_lines = "\n".join(
         f"- {name} ({' | '.join(info['values'])}): {info['description']}"
         for name, info in enum_fields.items()
     )
-
-    app_def_lines = "\n".join(
-        f'- "{k}": {v}' for k, v in app_definitions.items()
-    ) if app_definitions else ""
+    app_def_lines = "\n".join(f'- "{k}": {v}' for k, v in app_definitions.items()) if app_definitions else ""
 
     enum_defaults = {name: info["values"][0] for name, info in enum_fields.items()}
     boolean_defaults = {name: 0 for name in boolean_fields}
@@ -239,24 +246,33 @@ TAXONOMY = build_derived(_raw_taxonomy)
 
 
 # ---------------------------------------------------------------------------
-# Helpers
+# Small helpers
 # ---------------------------------------------------------------------------
 def load_json(path: Path, default):
-    if path.exists():
+    if not path.exists():
+        return default
+
+    def _read():
         with open(path, "r", encoding="utf-8") as f:
             return json.load(f)
-    return default
+
+    return _retry_on_file_lock(_read, description=f"reading {path.name}")
 
 
 def save_json(path: Path, data):
     STATE_DIR.mkdir(exist_ok=True)
     tmp = path.with_suffix(".tmp")
-    with open(tmp, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
-    tmp.replace(path)
+
+    def _write_and_replace():
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+        tmp.replace(path)
+
+    _retry_on_file_lock(_write_and_replace, description=f"writing {path.name}")
 
 
 def extract_json(raw_text: str):
+    """Robust extraction: handles fences, preamble text, and trailing prose."""
     text = raw_text.strip()
     fence_match = re.search(r"```(?:json)?\s*(.*?)\s*```", text, re.DOTALL)
     if fence_match:
@@ -294,19 +310,59 @@ def extract_json(raw_text: str):
     return json.loads(text[start:end])
 
 
-def _extract_retry_after_seconds(error: Exception) -> float | None:
-    body = getattr(error, "body", None)
-    if isinstance(body, dict) and "retry_after" in body:
-        try:
-            return float(body["retry_after"])
-        except (TypeError, ValueError):
-            pass
-    match = re.search(r"['\"]retry_after['\"]\s*:\s*(\d+(?:\.\d+)?)", str(error))
-    if match:
-        return float(match.group(1))
-    return None
+def load_tagged_ids(path: Path = OUTPUT_PATH) -> set[str]:
+    """
+    Safety net used at the start of every run/worker: whatever the
+    progress.json bookkeeping says, NEVER re-tag a project_id that's
+    already sitting in the output CSV.
+    """
+    if not path.exists():
+        return set()
+
+    def _read():
+        with open(path, newline="", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            return {row["project_id"] for row in reader if row.get("project_id")}
+
+    return _retry_on_file_lock(_read, description=f"reading {path.name}")
 
 
+# ---------------------------------------------------------------------------
+# Timing
+# ---------------------------------------------------------------------------
+def _record_call_duration(duration: float, worker_tag: str = ""):
+    global _call_durations
+    _call_durations.append(duration)
+    avg = sum(_call_durations) / len(_call_durations)
+    prefix = f"[{worker_tag}] " if worker_tag else ""
+    print(f"{prefix}⏱  response took {duration:.2f}s (avg over {len(_call_durations)} calls: {avg:.2f}s)")
+
+
+def _save_call_timing(worker_id: str):
+    save_json(STATE_DIR / f"call_timing_{worker_id}.json", {
+        "count": len(_call_durations),
+        "total_seconds": sum(_call_durations),
+        "average_seconds": (sum(_call_durations) / len(_call_durations)) if _call_durations else 0,
+        "durations": _call_durations,
+    })
+
+
+def _print_aggregate_timing(worker_ids: list[str]):
+    all_durations = []
+    for wid in worker_ids:
+        data = load_json(STATE_DIR / f"call_timing_{wid}.json", default=None)
+        if data and data.get("durations"):
+            all_durations.extend(data["durations"])
+    if not all_durations:
+        return
+    avg = sum(all_durations) / len(all_durations)
+    print(f"\n⏱  Aggregate across {len(worker_ids)} worker(s): {len(all_durations)} calls, "
+          f"avg response time {avg:.2f}s, total LLM time {sum(all_durations):.2f}s")
+
+
+# ---------------------------------------------------------------------------
+# LLM call
+# ---------------------------------------------------------------------------
 def call_llm(user_content: str, worker_tag: str = "") -> str:
     global _last_call_time, _key_index
     elapsed = time.monotonic() - _last_call_time
@@ -336,11 +392,20 @@ def call_llm(user_content: str, worker_tag: str = "") -> str:
 
             STATE_DIR.mkdir(exist_ok=True)
             suffix = f"_{worker_tag}" if worker_tag else ""
-            (STATE_DIR / f"last_request{suffix}.txt").write_text(
-                f"=== SYSTEM ===\n{TAXONOMY['system_prompt']}\n\n=== USER ===\n{user_content}",
-                encoding="utf-8",
-            )
-            (STATE_DIR / f"last_response{suffix}.txt").write_text(result, encoding="utf-8")
+
+            def _write_debug_files():
+                (STATE_DIR / f"last_request{suffix}.txt").write_text(
+                    f"=== SYSTEM ===\n{TAXONOMY['system_prompt']}\n\n=== USER ===\n{user_content}",
+                    encoding="utf-8",
+                )
+                (STATE_DIR / f"last_response{suffix}.txt").write_text(result, encoding="utf-8")
+
+            try:
+                _retry_on_file_lock(_write_debug_files, description="writing debug files")
+            except RuntimeError as debug_write_error:
+                # Debug files are nice-to-have, not critical — don't fail
+                # the whole batch just because these couldn't be written.
+                print(f"{prefix}⚠️  Could not write debug files (non-fatal): {debug_write_error}")
 
             return result
         except Exception as e:
@@ -353,6 +418,7 @@ def call_llm(user_content: str, worker_tag: str = "") -> str:
             print(f"{prefix}⚠️  Switching to key #{_key_index + 1}/{len(KEY_POOL)} in this worker's pool.")
 
     raise RuntimeError(f"API call failed after {MAX_RETRIES} attempts: {last_error}")
+
 
 def flatten_tagged(tagged: dict, project: dict) -> dict:
     row = {
@@ -395,14 +461,34 @@ def flatten_tagged(tagged: dict, project: dict) -> dict:
     return row
 
 
-def write_rows(rows: list[dict], output_path: Path, first_write: bool):
-    STATE_DIR.mkdir(exist_ok=True)
-    mode = "w" if first_write else "a"
-    with open(output_path, mode, newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=TAXONOMY["csv_columns"])
-        if first_write:
-            writer.writeheader()
-        writer.writerows(rows)
+def tag_batch(batch: list[dict], worker_tag: str = "") -> dict:
+    user_content = (
+        f"Tag these {len(batch)} projects:\n\n"
+        + json.dumps(
+            [
+                {
+                    "project_id": p["project_id"],
+                    "title": p["title"],
+                    "description": p["description"][:800],
+                    "skills": p.get("skills", []),
+                }
+                for p in batch
+            ],
+            ensure_ascii=False,
+        )
+    )
+
+    raw = call_llm(user_content, worker_tag=worker_tag)
+
+    try:
+        tagged_list = extract_json(raw)
+    except json.JSONDecodeError as e:
+        raise RuntimeError(f"Could not parse LLM output: {e}\nRaw (first 500 chars):\n{raw[:500]}")
+
+    if not isinstance(tagged_list, list):
+        raise RuntimeError(f"Expected JSON array, got {type(tagged_list)}")
+
+    return {item["project_id"]: item for item in tagged_list if "project_id" in item}
 
 
 # ---------------------------------------------------------------------------
@@ -478,248 +564,242 @@ def fetch_projects(
 
 
 # ---------------------------------------------------------------------------
-# Core tagging logic
+# Shared-file writers (cross-process lock + Windows-file-lock retry)
 # ---------------------------------------------------------------------------
-def tag_batch(batch: list[dict], worker_tag: str = "") -> dict:
-    user_content = (
-        f"Tag these {len(batch)} projects:\n\n"
-        + json.dumps(
-            [
-                {
-                    "project_id": p["project_id"],
-                    "title": p["title"],
-                    "description": p["description"][:800],
-                    "skills": p.get("skills", []),
-                }
-                for p in batch
-            ],
-            ensure_ascii=False,
-        )
-    )
+def append_rows_locked(rows: list[dict], csv_lock):
+    if not rows:
+        return
+    with csv_lock:
+        STATE_DIR.mkdir(exist_ok=True)
 
-    raw = call_llm(user_content, worker_tag=worker_tag)
+        def _write():
+            first_write = not OUTPUT_PATH.exists()
+            with open(OUTPUT_PATH, "w" if first_write else "a", newline="", encoding="utf-8") as f:
+                writer = csv.DictWriter(f, fieldnames=TAXONOMY["csv_columns"])
+                if first_write:
+                    writer.writeheader()
+                writer.writerows(rows)
+
+        _retry_on_file_lock(_write, description=f"writing {OUTPUT_PATH.name}")
+
+
+def update_progress_locked(progress_lock, worker_id: str, para: int, local_para: int,
+                            rows_written: int, my_local_batch_count: int):
+    with progress_lock:
+        progress = load_json(PROGRESS_PATH, default={
+            "last_created_at": None,
+            "projects_tagged": 0,
+            "batches_completed": 0,
+            "last_run_para_degree": para,
+            "last_run_local_para_degree": local_para,
+            "process_batch_progress": {},
+        })
+        progress.setdefault("process_batch_progress", {})
+        progress["process_batch_progress"][worker_id] = my_local_batch_count
+        progress["projects_tagged"] = progress.get("projects_tagged", 0) + rows_written
+        progress["batches_completed"] = progress.get("batches_completed", 0) + 1
+        progress["last_run_para_degree"] = para
+        progress["last_run_local_para_degree"] = local_para
+        save_json(PROGRESS_PATH, progress)
+
+
+def finalize_progress_locked(progress_lock, para: int, local_para: int, newest_created_at: str | None):
+    """
+    Called once, only after ALL workers in the session finish their full
+    batch list. Advances the real 'last_created_at' cursor (so the next
+    invocation's DB query starts later) and clears the per-worker
+    in-session counters, since they're meaningless once the session is done.
+    """
+    with progress_lock:
+        progress = load_json(PROGRESS_PATH, default={
+            "last_created_at": None, "projects_tagged": 0, "batches_completed": 0,
+        })
+        if newest_created_at:
+            progress["last_created_at"] = newest_created_at
+        progress["last_run_para_degree"] = para
+        progress["last_run_local_para_degree"] = local_para
+        progress["process_batch_progress"] = {}
+        save_json(PROGRESS_PATH, progress)
+
+
+# ---------------------------------------------------------------------------
+# Worker process entry point
+# ---------------------------------------------------------------------------
+def worker_loop(worker_id: str, key_pool: list[str], my_batches: list[list[dict]],
+                 resume_from_local_idx: int, already_tagged_ids: set[str],
+                 csv_lock, progress_lock, para: int, local_para: int):
+    """
+    Runs inside its own OS process. `worker_id` is a string like "0_1"
+    (group 0, local sub-worker 1) that uniquely identifies this slot for
+    logging, progress tracking, and per-worker file naming.
+    """
+    prefix = f"[{worker_id}] "
+    init_worker_client(key_pool)
+
+    remaining = my_batches[resume_from_local_idx:]
+    print(f"{prefix}assigned {len(my_batches)} batch(es) total, resuming from local batch #{resume_from_local_idx} "
+          f"({len(remaining)} left)")
 
     try:
-        tagged_list = extract_json(raw)
-    except json.JSONDecodeError as e:
-        raise RuntimeError(f"Could not parse LLM output: {e}\nRaw (first 500 chars):\n{raw[:500]}")
+        for offset, batch in enumerate(remaining):
+            local_batch_num = resume_from_local_idx + offset + 1
 
-    if not isinstance(tagged_list, list):
-        raise RuntimeError(f"Expected JSON array, got {type(tagged_list)}")
+            # Safety-net dedup — covers the case where progress.json's
+            # bookkeeping doesn't line up cleanly (e.g. --para changed).
+            batch = [p for p in batch if p["project_id"] not in already_tagged_ids]
+            if not batch:
+                update_progress_locked(progress_lock, worker_id, para, local_para, 0, local_batch_num)
+                continue
 
-    return {item["project_id"]: item for item in tagged_list if "project_id" in item}
+            print(f"\n{prefix}--- local batch {local_batch_num}/{len(my_batches)} ({len(batch)} projects) ---")
+            for p in batch:
+                print(f"{prefix}   {p['title'][:60]}")
 
+            try:
+                tagged_by_id = tag_batch(batch, worker_tag=worker_id)
+            except Exception as e:
+                print(f"{prefix}❌ batch failed permanently: {e}")
+                print(f"{prefix}   Progress NOT advanced for this batch. Re-run to retry.")
+                raise
 
-# ---------------------------------------------------------------------------
-# Main orchestration (single worker)
-# ---------------------------------------------------------------------------
-def run(
-    organization_name: str | None,
-    limit: int | None,
-    key_pool: list[str] | None = None,
-    worker_id: int | None = None,
-    num_workers: int = 1,
-):
-    worker_tag = f"w{worker_id}" if worker_id is not None else ""
-    suffix = f"_{worker_id}" if worker_id is not None else ""
-    progress_path = STATE_DIR / f"progress{suffix}.json"
-    output_path = STATE_DIR / f"tagged_projects{suffix}.csv"
+            rows = []
+            for p in batch:
+                pid = p["project_id"]
+                if pid not in tagged_by_id:
+                    print(f"{prefix}   ⚠️  LLM did not return a result for {pid} ({p['title'][:40]}) — skipping")
+                    continue
+                rows.append(flatten_tagged(tagged_by_id[pid], p))
+                already_tagged_ids.add(pid)
 
-    init_worker_client(key_pool or ALL_KEYS)
-
-    try:
-        _run_body(organization_name, limit, worker_id, num_workers,
-                   worker_tag, progress_path, output_path)
+            append_rows_locked(rows, csv_lock)
+            update_progress_locked(progress_lock, worker_id, para, local_para, len(rows), local_batch_num)
+            print(f"{prefix}   ✅ {len(rows)} rows written")
     finally:
         _save_call_timing(worker_id)
 
 
-def _run_body(organization_name, limit, worker_id, num_workers,
-              worker_tag, progress_path, output_path):
-    progress = load_json(progress_path, default={
+# ---------------------------------------------------------------------------
+# Main orchestration
+# ---------------------------------------------------------------------------
+def run(organization_name: str | None, limit: int | None, para: int = 1, local_para: int = 1):
+    progress = load_json(PROGRESS_PATH, default={
         "last_created_at": None,
         "projects_tagged": 0,
         "batches_completed": 0,
+        "last_run_para_degree": para,
+        "last_run_local_para_degree": local_para,
+        "process_batch_progress": {},
     })
 
-    after_created_at = progress["last_created_at"]
-    first_write = after_created_at is None
+    after_created_at = progress.get("last_created_at")
+    prev_para = progress.get("last_run_para_degree")
+    prev_local_para = progress.get("last_run_local_para_degree", 1)
+    per_worker_progress = progress.get("process_batch_progress", {}) or {}
 
-    prefix = f"[{worker_tag}] " if worker_tag else ""
-    if after_created_at:
-        print(f"{prefix}↻ Resuming after {after_created_at} ({progress['projects_tagged']} projects already tagged)")
-
-    all_projects = fetch_projects(None, organization_name, None)
-
-    if num_workers > 1:
-        shard = [p for i, p in enumerate(all_projects) if i % num_workers == worker_id]
-    else:
-        shard = all_projects
+    if per_worker_progress and (prev_para != para or prev_local_para != local_para):
+        print(f"⚠️  Previous incomplete run used --para {prev_para} --local-para {prev_local_para}, "
+              f"this run uses --para {para} --local-para {local_para}. Batch-to-worker assignment "
+              f"changes with these settings, so this session's per-worker resume counters restart "
+              f"from zero — but the CSV dedup check still guarantees no project is ever tagged twice.")
+        per_worker_progress = {}
 
     if after_created_at:
-        shard = [p for p in shard if p["created_at"] > after_created_at]
+        print(f"↻ Resuming after {after_created_at} ({progress.get('projects_tagged', 0)} projects already tagged)")
 
-    if limit:
-        shard = shard[:limit]
+    all_projects = fetch_projects(after_created_at, organization_name, limit)
+    if not all_projects:
+        print("✅ Nothing to do.")
+        return
 
-    total = len(shard)
-    print(f"{prefix}📦 {total} projects to tag"
+    batches = [all_projects[i:i + BATCH_SIZE] for i in range(0, len(all_projects), BATCH_SIZE)]
+    newest_created_at = all_projects[-1]["created_at"]
+    total_workers = para * local_para
+
+    print(f"📦 {len(all_projects)} projects ({len(batches)} batches) to tag"
           + (f" (filtered to {organization_name})" if organization_name else ""))
 
-    if total == 0:
-        print(f"{prefix}✅ Nothing to do.")
+    already_tagged_ids = load_tagged_ids()
+
+    # -------------------------------------------------------------------
+    # Single process
+    # -------------------------------------------------------------------
+    if total_workers == 1:
+        manager = multiprocessing.Manager()
+        csv_lock = manager.Lock()
+        progress_lock = manager.Lock()
+        resume_from = int(per_worker_progress.get("0_0", 0))
+        worker_loop("0_0", ALL_KEYS, batches, resume_from, set(already_tagged_ids),
+                    csv_lock, progress_lock, para, local_para)
+        finalize_progress_locked(progress_lock, para, local_para, newest_created_at)
+        _print_aggregate_timing(["0_0"])
+        print(f"\n✅ Done. → {OUTPUT_PATH}")
         return
 
-    for batch_start in range(0, total, BATCH_SIZE):
-        batch = shard[batch_start: batch_start + BATCH_SIZE]
-        batch_num = batch_start // BATCH_SIZE + 1
-        total_batches = (total + BATCH_SIZE - 1) // BATCH_SIZE
-
-        print(f"\n{prefix}--- Batch {batch_num}/{total_batches} ({len(batch)} projects) ---")
-        for p in batch:
-            print(f"{prefix}   {p['title'][:60]}")
-
-        try:
-            tagged_by_id = tag_batch(batch, worker_tag=worker_tag)
-        except Exception as e:
-            print(f"{prefix}❌ Batch {batch_num} failed permanently: {e}")
-            print(f"{prefix}   Progress NOT advanced. Re-run to retry this batch.")
-            raise
-
-        rows = []
-        last_created_at = progress["last_created_at"]
-        for p in batch:
-            pid = p["project_id"]
-            if pid not in tagged_by_id:
-                print(f"{prefix}   ⚠️  LLM did not return a result for project {pid} ({p['title'][:40]}) — skipping")
-                continue
-            row = flatten_tagged(tagged_by_id[pid], p)
-            rows.append(row)
-            last_created_at = p["created_at"]
-
-        if rows:
-            write_rows(rows, output_path, first_write=first_write)
-            first_write = False
-
-        progress["last_created_at"] = last_created_at
-        progress["projects_tagged"] += len(rows)
-        progress["batches_completed"] += 1
-        save_json(progress_path, progress)
-
-        print(f"{prefix}   ✅ {len(rows)} rows written (total so far: {progress['projects_tagged']})")
-
-    print(f"\n{prefix}✅ Done. {progress['projects_tagged']} projects tagged → {output_path}")
-
-def _worker_entry(worker_id, num_workers, key_pool, organization_name, limit):
-    run(
-        organization_name=organization_name,
-        limit=limit,
-        key_pool=key_pool,
-        worker_id=worker_id,
-        num_workers=num_workers,
-    )
-
-def _print_aggregate_timing(para: int):
-    all_durations = []
-    for i in range(para):
-        path = STATE_DIR / f"call_timing_{i}.json"
-        data = load_json(path, default=None)
-        if data and data.get("durations"):
-            all_durations.extend(data["durations"])
-
-    if not all_durations:
-        return
-
-    avg = sum(all_durations) / len(all_durations)
-    print(f"\n⏱  Aggregate across {para} workers: {len(all_durations)} calls, "
-          f"avg response time {avg:.2f}s, total LLM time {sum(all_durations):.2f}s")
-
-def merge_worker_outputs(para: int, final_path: Path = STATE_DIR / "tagged_projects.csv"):
-    writer = None
-    rows_written = 0
-    with open(final_path, "w", newline="", encoding="utf-8") as out_f:
-        for i in range(para):
-            part = STATE_DIR / f"tagged_projects_{i}.csv"
-            if not part.exists():
-                continue
-            with open(part, newline="", encoding="utf-8") as in_f:
-                reader = csv.DictReader(in_f)
-                if reader.fieldnames is None:
-                    continue
-                if writer is None:
-                    writer = csv.DictWriter(out_f, fieldnames=reader.fieldnames)
-                    writer.writeheader()
-                for row in reader:
-                    writer.writerow(row)
-                    rows_written += 1
-    if writer is not None:
-        print(f"✅ Merged {para} worker outputs → {final_path} ({rows_written} rows)")
-    else:
-        print("⚠️  No worker output files found to merge — nothing written.")
-
-def run_parallel(organization_name: str | None, limit: int | None, para: int):
+    # -------------------------------------------------------------------
+    # Multi-process: para groups × local_para sub-workers each
+    # -------------------------------------------------------------------
     key_pools = get_key_pools(para)
-    print(f"🧵 Launching {para} parallel workers")
-    for i, pool in enumerate(key_pools):
-        print(f"   worker {i}: {len(pool)} key(s) starting with ...{pool[0][-4:]}")
+    slots = [(g, l) for g in range(para) for l in range(local_para)]  # index = global slot
+    worker_ids = [f"{g}_{l}" for (g, l) in slots]
 
+    worker_batches = [
+        [b for i, b in enumerate(batches) if i % total_workers == slot_idx]
+        for slot_idx in range(total_workers)
+    ]
+
+    manager = multiprocessing.Manager()
+    csv_lock = manager.Lock()
+    progress_lock = manager.Lock()
+
+    print(f"🧵 Launching {para} group(s) × {local_para} local worker(s) = {total_workers} process(es)")
     procs = []
-    for i in range(para):
+    for slot_idx, (g, l) in enumerate(slots):
+        wid = worker_ids[slot_idx]
+        resume_from = int(per_worker_progress.get(wid, 0))
+        print(f"   worker {wid}: {len(worker_batches[slot_idx])} batch(es), resuming from local #{resume_from}, "
+              f"group {g} keys starting with ...{key_pools[g][0][-4:]}")
+
         p = multiprocessing.Process(
-            target=_worker_entry,
-            args=(i, para, key_pools[i], organization_name, limit),
+            target=worker_loop,
+            args=(wid, key_pools[g], worker_batches[slot_idx], resume_from,
+                  set(already_tagged_ids), csv_lock, progress_lock, para, local_para),
         )
         p.start()
         procs.append(p)
 
+    failed = []
+
     def _handle_sigint(signum, frame):
-        print("\n🛑 Interrupt received — terminating workers, will merge partial output...")
+        print("\n🛑 Interrupt received — stopping all workers. Progress is saved incrementally "
+              "after every batch, so it's safe to resume later (same or different --para/--local-para).")
         for p in procs:
             if p.is_alive():
                 p.terminate()
         for p in procs:
             p.join()
-        merge_worker_outputs(para)
+        _print_aggregate_timing(worker_ids)
         sys.exit(130)
 
     old_handler = signal.signal(signal.SIGINT, _handle_sigint)
-
     try:
-        exit_codes = []
         for p in procs:
             p.join()
-            exit_codes.append(p.exitcode)
+        exit_codes = [p.exitcode for p in procs]
+        failed = [worker_ids[i] for i, code in enumerate(exit_codes) if code != 0]
 
-        failed = [i for i, code in enumerate(exit_codes) if code != 0]
         if failed:
-            print(f"⚠️  Worker(s) {failed} exited with errors. Merging partial output anyway.")
+            print(f"⚠️  Worker(s) {failed} exited with errors. Progress up to each worker's last "
+                  f"completed batch is saved; re-run to retry the rest.")
         else:
             print("✅ All workers finished cleanly.")
+            finalize_progress_locked(progress_lock, para, local_para, newest_created_at)
     finally:
         signal.signal(signal.SIGINT, old_handler)
-        merge_worker_outputs(para)
-        _print_aggregate_timing(para)
+        _print_aggregate_timing(worker_ids)
 
+    print(f"\n✅ Done. → {OUTPUT_PATH}")
     if failed:
-        raise RuntimeError(f"Worker(s) {failed} failed. Exit codes: {exit_codes}")
-
-def merge_worker_outputs(para: int, final_path: Path = STATE_DIR / "tagged_projects.csv"):
-    """Optional helper: concatenate per-worker CSVs into one file."""
-    first_write = True
-    with open(final_path, "w", newline="", encoding="utf-8") as out_f:
-        writer = None
-        for i in range(para):
-            part = STATE_DIR / f"tagged_projects_{i}.csv"
-            if not part.exists():
-                continue
-            with open(part, newline="", encoding="utf-8") as in_f:
-                reader = csv.DictReader(in_f)
-                if writer is None:
-                    writer = csv.DictWriter(out_f, fieldnames=reader.fieldnames)
-                    writer.writeheader()
-                for row in reader:
-                    writer.writerow(row)
-    print(f"✅ Merged {para} worker outputs → {final_path}")
+        raise RuntimeError(f"Worker(s) {failed} failed.")
 
 
 if __name__ == "__main__":
@@ -727,21 +807,15 @@ if __name__ == "__main__":
     parser.add_argument("--organization", type=str, default=None,
                         help="Filter to one organization by name (e.g. 'Karlancer')")
     parser.add_argument("--limit", type=int, default=None,
-                        help="Max number of projects to tag in this run (applied per-worker when --para > 1)")
+                        help="Max number of projects to tag in this run (total, across all workers)")
     parser.add_argument("--para", type=int, default=1,
-                        help="Degree of parallelism — number of worker processes, each with its own API key subset")
-    parser.add_argument("--merge", action="store_true",
-                        help="Only merge existing per-worker CSVs into tagged_projects.csv (no tagging run)")
+                        help="Number of API-key groups to split work across (top-level parallelism)")
+    parser.add_argument("--local-para", type=int, default=1,
+                        help="Number of sub-processes PER key group, sharing that group's keys concurrently")
     args = parser.parse_args()
 
-    if args.merge:
-        merge_worker_outputs(args.para)
-        _print_aggregate_timing(args.para)
-    elif args.para > 1:
-        run_parallel(args.organization, args.limit, args.para)
-    else:
-        try:
-            run(args.organization, args.limit)
-        except KeyboardInterrupt:
-            print("\n🛑 Interrupted — partial progress/output already saved incrementally.")
-            sys.exit(130)
+    try:
+        run(args.organization, args.limit, para=args.para, local_para=args.local_para)
+    except KeyboardInterrupt:
+        print("\n🛑 Interrupted — partial progress already saved.")
+        sys.exit(130)

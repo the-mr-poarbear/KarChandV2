@@ -1,0 +1,212 @@
+[
+  {
+    "project_id": "902758a4-a0d8-495e-889d-329d491b3fce",
+    "features": {
+      "Content Management": 2,
+      "SEO": 5,
+      "Responsive Design": 2,
+      "Web Application": 2
+    },
+    "application_type": {
+      "website": 1
+    },
+    "technology_modifiers": {
+      "WordPress": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 5,
+      "estimated_entities": 0
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "34306099-6a32-40e0-8a1c-472e84a0bb17",
+    "features": {
+      "Responsive Design": 4,
+      "Monitoring & Logging": 1,
+      "Web Application": 2
+    },
+    "application_type": {
+      "website": 1
+    },
+    "technology_modifiers": {
+      "WordPress": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 1,
+      "estimated_entities": 0
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 1,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "bugfix",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "e48d6462-6f99-4624-8662-6cfc911374ae",
+    "features": {
+      "Authentication": 5,
+      "User Profiles": 4,
+      "Wallet & Balance Management": 5,
+      "Payment Processing": 4,
+      "Order Management": 4,
+      "Pricing & Discount Rules": 3,
+      "External API Integration": 4,
+      "Payment Gateway Integration": 4,
+      "SMS Services": 4,
+      "User Management": 3,
+      "Forms & Data Collection": 3,
+      "File Upload & Storage": 2,
+      "Task Management": 2,
+      "Mobile Application": 5,
+      "Security": 4
+    },
+    "application_type": {
+      "financial_system": 1,
+      "mobile_application": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 3,
+      "estimated_screens": 15,
+      "estimated_entities": 8
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 1,
+      "web": 0,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "high",
+      "data_volume": "medium",
+      "integration_complexity": "high",
+      "ui_complexity": "medium",
+      "algorithmic_complexity": "medium"
+    }
+  },
+  {
+    "project_id": "33f26d4a-7d3d-449e-8fbf-7a0c58e38e9a",
+    "features": {
+      "Responsive Design": 5,
+      "Web Application": 2,
+      "Subscription Management": 2
+    },
+    "application_type": {
+      "web_application": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 3,
+      "estimated_entities": 0
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 1,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "bugfix",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "medium",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "befdae25-d246-42d8-9c59-ed5e02e185e9",
+    "features": {
+      "Payment Gateway Integration": 5,
+      "Payment Processing": 4,
+      "Authentication": 4,
+      "Web Application": 3
+    },
+    "application_type": {
+      "web_application": 1
+    },
+    "technology_modifiers": {
+      "WordPress": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 1,
+      "estimated_screens": 2,
+      "estimated_entities": 1
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "maintenance",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  }
+]

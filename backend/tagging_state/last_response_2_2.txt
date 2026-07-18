@@ -1,0 +1,213 @@
+[
+  {
+    "project_id": "48ae790c-31a8-4e11-908b-7fc91de88068",
+    "features": {
+      "Authentication": 4,
+      "Settings & Configuration": 4,
+      "File Upload & Storage": 4,
+      "Image Processing": 4,
+      "External API Integration": 5,
+      "Infrastructure & Operations": 3,
+      "Task Management": 4,
+      "Background Jobs": 4,
+      "Monitoring & Logging": 3,
+      "Security": 3
+    },
+    "application_type": {
+      "desktop_application": 1,
+      "automation_system": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 1,
+      "estimated_screens": 4,
+      "estimated_entities": 3
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 0,
+      "offline": 1,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "medium",
+      "data_volume": "medium",
+      "integration_complexity": "medium",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "affe8f52-fc22-4715-8688-c9c21f4b2693",
+    "features": {},
+    "application_type": {
+      "web_application": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 0,
+      "estimated_entities": 0
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "bugfix",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "17a9ef2f-8776-4256-894e-c5708348b8e7",
+    "features": {
+      "Infrastructure & Operations": 4,
+      "Data Migration": 3,
+      "Database Management": 4
+    },
+    "application_type": {
+      "web_application": 1,
+      "automation_system": 1
+    },
+    "technology_modifiers": {
+      "WordPress": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 1,
+      "estimated_screens": 0,
+      "estimated_entities": 2
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 1,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "maintenance",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "fd5039f8-136c-4299-9e75-91b89378c4a9",
+    "features": {
+      "Messaging & Chat": 4,
+      "Settings & Configuration": 3,
+      "Bots & Automation": 5,
+      "Desktop Application": 5,
+      "Workflow Automation": 3,
+      "Hardware Integration": 2
+    },
+    "application_type": {
+      "desktop_application": 1,
+      "automation_system": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 1,
+      "estimated_screens": 3,
+      "estimated_entities": 2
+    },
+    "boolean_modifiers": {
+      "real_time": 1,
+      "mobile": 0,
+      "web": 0,
+      "offline": 1,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 1,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "basic",
+      "business_logic": "medium",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "28ab59ae-393b-4b78-82ca-20bec95997b2",
+    "features": {
+      "User Management": 2,
+      "User Profiles": 2,
+      "Localization & Internationalization": 5,
+      "Settings & Configuration": 3,
+      "Content Management": 2,
+      "Forms & Data Collection": 2,
+      "Search": 2,
+      "Job Board & Recruitment": 4,
+      "Email Services": 2,
+      "Notifications": 2
+    },
+    "application_type": {
+      "web_application": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 15,
+      "estimated_entities": 6
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "maintenance",
+      "ai_level": "none",
+      "business_logic": "medium",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "low"
+    }
+  }
+]

@@ -1,0 +1,305 @@
+[
+  {
+    "project_id": "2ec295c0-79fb-46dc-9ef1-0d6f56531b7a",
+    "features": {
+      "Authentication": 4,
+      "User Management": 4,
+      "Administration Panel": 4,
+      "Dashboard": 3,
+      "Settings & Configuration": 3,
+      "Content Management": 3,
+      "Forms & Data Collection": 3,
+      "Search": 3,
+      "Filtering & Sorting": 3,
+      "Reporting": 3,
+      "Payment Processing": 4,
+      "Shopping Cart & Checkout": 4,
+      "Order Management": 4,
+      "Inventory Management": 3,
+      "Product Catalog": 4,
+      "Pricing & Discount Rules": 4,
+      "External API Integration": 3,
+      "Payment Gateway Integration": 4,
+      "Responsive Design": 4,
+      "Security": 3,
+      "Monitoring & Logging": 2,
+      "Web Application": 4
+    },
+    "application_type": {
+      "website": 1,
+      "web_application": 1,
+      "ecommerce": 1,
+      "marketplace": 1,
+      "financial_system": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 2,
+      "estimated_screens": 15,
+      "estimated_entities": 12
+    },
+    "boolean_modifiers": {
+      "real_time": 1,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 1,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "high",
+      "data_volume": "medium",
+      "integration_complexity": "medium",
+      "ui_complexity": "high",
+      "algorithmic_complexity": "medium"
+    }
+  },
+  {
+    "project_id": "e2545a43-2a0e-4bac-92df-ea8d24f7e37b",
+    "features": {
+      "Authentication": 4,
+      "Authorization & Role Management": 4,
+      "User Management": 4,
+      "Administration Panel": 4,
+      "Forms & Data Collection": 4,
+      "File Upload & Storage": 4,
+      "Document Management": 3,
+      "Search": 2,
+      "Filtering & Sorting": 2,
+      "Reporting": 2,
+      "Notifications": 3,
+      "Workflow Automation": 3,
+      "Task Management": 3,
+      "Approval Workflow": 4,
+      "Inventory Management": 4,
+      "Product Catalog": 3,
+      "Image Processing": 2,
+      "Mobile Application": 5,
+      "Web Application": 2,
+      "Security": 2,
+      "Backup & Recovery": 3,
+      "Data Synchronization": 2,
+      "Accessibility": 2
+    },
+    "application_type": {
+      "web_application": 1,
+      "erp": 1,
+      "other": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 0,
+      "estimated_screens": 10,
+      "estimated_entities": 6
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 1,
+      "web": 1,
+      "offline": 1,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 1
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "high",
+      "data_volume": "medium",
+      "integration_complexity": "low",
+      "ui_complexity": "medium",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "aab73517-16cd-409d-88e2-3d5d317be276",
+    "features": {
+      "File Upload & Storage": 4,
+      "Web Scraping & Crawling": 5,
+      "Bots & Automation": 5,
+      "External API Integration": 3
+    },
+    "application_type": {
+      "automation_system": 1,
+      "other": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 1,
+      "estimated_screens": 1,
+      "estimated_entities": 2
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 0,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 1,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "low",
+      "data_volume": "small",
+      "integration_complexity": "low",
+      "ui_complexity": "low",
+      "algorithmic_complexity": "medium"
+    }
+  },
+  {
+    "project_id": "8fc4285c-1f33-4b26-9271-060c44a06f24",
+    "features": {
+      "Authentication": 4,
+      "User Management": 3,
+      "User Profiles": 2,
+      "Administration Panel": 4,
+      "Dashboard": 3,
+      "Settings & Configuration": 2,
+      "Content Management": 4,
+      "Rich Text Editing": 3,
+      "Media Management": 2,
+      "Forms & Data Collection": 3,
+      "File Upload & Storage": 2,
+      "Search": 3,
+      "Filtering & Sorting": 3,
+      "Import & Export": 2,
+      "Reporting": 2,
+      "Notifications": 2,
+      "Email Services": 2,
+      "Payment Processing": 4,
+      "Shopping Cart & Checkout": 4,
+      "Order Management": 4,
+      "Inventory Management": 3,
+      "Product Catalog": 4,
+      "Pricing & Discount Rules": 4,
+      "External API Integration": 3,
+      "Payment Gateway Integration": 4,
+      "SMS Services": 2,
+      "Responsive Design": 4,
+      "SEO": 3,
+      "Security": 3,
+      "Backup & Recovery": 2,
+      "Web Application": 5
+    },
+    "application_type": {
+      "web_application": 1,
+      "ecommerce": 1,
+      "cms": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 3,
+      "estimated_screens": 20,
+      "estimated_entities": 15
+    },
+    "boolean_modifiers": {
+      "real_time": 0,
+      "mobile": 0,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 1,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,
+      "cross_platform": 0
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "high",
+      "data_volume": "medium",
+      "integration_complexity": "medium",
+      "ui_complexity": "high",
+      "algorithmic_complexity": "low"
+    }
+  },
+  {
+    "project_id": "132439e7-ebce-4b93-a2c4-7e47fdbcd072",
+    "features": {
+      "Authentication": 4,
+      "User Management": 4,
+      "User Profiles": 2,
+      "Administration Panel": 4,
+      "Dashboard": 3,
+      "Forms & Data Collection": 2,
+      "Search": 3,
+      "Filtering & Sorting": 3,
+      "Import & Export": 2,
+      "Reporting": 3,
+      "Analytics": 3,
+      "Notifications": 2,
+      "Email Services": 2,
+      "Payment Processing": 4,
+      "Wallet & Balance Management": 4,
+      "Shopping Cart & Checkout": 3,
+      "Order Management": 3,
+      "Inventory Management": 2,
+      "Product Catalog": 3,
+      "Pricing & Discount Rules": 3,
+      "Marketplace": 4,
+      "Subscription Management": 2,
+      "External API Integration": 3,
+      "Payment Gateway Integration": 4,
+      "Social Authentication": 2,
+      "Responsive Design": 4,
+      "Security": 3,
+      "Monitoring & Logging": 2,
+      "Web Application": 4,
+      "Mobile Application": 3,
+      "Visualization & Charts": 2
+    },
+    "application_type": {
+      "web_application": 1,
+      "ecommerce": 1,
+      "marketplace": 1,
+      "financial_system": 1
+    },
+    "technology_modifiers": {
+      "Custom Development": 1
+    },
+    "numeric_modifiers": {
+      "external_api_count": 3,
+      "estimated_screens": 25,
+      "estimated_entities": 15
+    },
+    "boolean_modifiers": {
+      "real_time": 1,
+      "mobile": 1,
+      "web": 1,
+      "offline": 0,
+      "legacy_system": 0,
+      "existing_codebase": 0,
+      "requires_refactoring": 0,
+      "requires_reverse_engineering": 1,
+      "cross_platform": 1
+    },
+    "enum_modifiers": {
+      "project_type": "new",
+      "ai_level": "none",
+      "business_logic": "high",
+      "data_volume": "medium",
+      "integration_complexity": "medium",
+      "ui_complexity": "high",
+      "algorithmic_complexity": "medium"
+    }
+  }
+]
