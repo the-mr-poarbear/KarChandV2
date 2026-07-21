@@ -15,10 +15,10 @@ URL = (
 def _parse_row(row: list[str]) -> USDCreate:
     return USDCreate(
         date=datetime.strptime(row[6], "%Y/%m/%d").date(),
-        open=int(row[0].replace(",", "")),
-        high=int(row[1].replace(",", "")),
-        low=int(row[2].replace(",", "")),
-        close=int(row[3].replace(",", "")),
+        open=int(row[0].replace(",", ""))/10,
+        high=int(row[1].replace(",", ""))/10,
+        low=int(row[2].replace(",", ""))/10,
+        close=int(row[3].replace(",", ""))/10,
     )
 
 

@@ -15,3 +15,5 @@ scikit-learn
 shap
 xgboost
 tensorflow
+catboost 
+sentence_transformers
