@@ -285,7 +285,7 @@ def build_dataset(tagged_csv: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
     # ── Column ordering ────────────────────────────────────────────────────
     # Put the most important/interpretable columns first
     front_cols = [
-        'project_id', 'title', 'category', 'organization',
+        'project_id', 'title', 'category', 'organization','outer_link',
         'created_at', 'scraped_date_created',
         'usd_rate', 'usd_rate_date',
         'final_budget', 'log_final_budget',
@@ -297,7 +297,7 @@ def build_dataset(tagged_csv: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
         'has_final_budget',
         'duration', 'duration_days',
         'description_length', 'description_word_count', 'skill_count',
-        'skills', 'description', 'outer_link',
+        'skills', 'description',
     ]
     front_cols = [c for c in front_cols if c in merged.columns]
     remaining = [c for c in merged.columns if c not in front_cols]

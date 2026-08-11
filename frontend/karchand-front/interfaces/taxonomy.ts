@@ -12,10 +12,10 @@ export interface TaxonomyConfig {
 }
 
 export interface ProjectSettingsState {
-  features: string[];
-  application_types: string[];
-  technology_modifiers: string[];
-  boolean_modifiers: string[];
-  enum_modifiers: Record<string, string>;
-  numeric_modifiers: Record<string, number>;
+    features: string[];
+    boolean_modifiers: string[];
+    application_types: string[];
+    technology_modifiers: string[];
+    enum_modifiers?: Record<string, string>; 
+    numeric_modifiers?: Record<string, number>;
 }

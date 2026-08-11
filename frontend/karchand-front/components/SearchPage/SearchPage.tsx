@@ -6,11 +6,15 @@ import { ProcessDesc } from "@/functions/ProcessDesc";
 import { useState , useEffect} from "react";
 import { ProjectPrediction } from "@/interfaces/projectPrediction";
 import Result from "../Result/Result";
+import { ProjectSettingsState } from "@/interfaces/taxonomy";
+import { SimilarProjects } from "@/functions/SimilarProjects";
+import { SimilarProject } from "@/interfaces/similarProjects";
 
 const SearchPage = () => {
     // const queryClient = useQueryClient();
     const [ready , setReady] = useState(false)
     const [result , setResult] = useState<ProjectPrediction>()
+    const [similarProjects , setSimilarProjects] = useState<SimilarProject[]>()
 
 const smoothScrollTo = (element: HTMLElement, duration = 1000) => {
   const start = window.scrollY;
@@ -53,32 +57,55 @@ useEffect(() => {
     smoothScrollTo(result, 1200);
   }
 }, [ready]);
+
+  const similarProjectsMutate = useMutation({
+      mutationFn: async ({
+      settings
+      }: {
+      settings: ProjectSettingsState;
+      }) =>SimilarProjects(settings , 10),
+      onSuccess: (res) => {
+      console.log("res", res);
+      setSimilarProjects(res)
+
+      // window.alert("hiii")
+      },
+      onError: (error) => {
+      console.log(error);
+      // window.alert("bye")
+      // setIsLoading(false);
+      },
+  });
     
-    const searchMutate = useMutation({
-        mutationFn: async ({
-        projectDesc
-        }: {
-        projectDesc: string;
-        }) =>ProcessDesc(projectDesc),
-        onSuccess: (res) => {
-        console.log("res", res);
-        setReady(true)
-        setResult(res)
-        // window.alert("hiii")
-        },
-        onError: (error) => {
-        console.log("error12");
-        // window.alert("bye")
-        // setIsLoading(false);
-        },
-    });
+  const searchMutate = useMutation({
+      mutationFn: async ({
+      projectDesc
+      }: {
+      projectDesc: string;
+      }) =>ProcessDesc(projectDesc),
+      onSuccess: (res) => {
+      console.log("res", res);
+      setReady(true)
+      setResult(res)
+      if(res?.suggested_settings){
+        similarProjectsMutate.mutate({settings:res?.suggested_settings})
+      }
+
+      // window.alert("hiii")
+      },
+      onError: (error) => {
+      console.log(error);
+      // window.alert("bye")
+      // setIsLoading(false);
+      },
+  });
     return (
         <main className="">
             <div className="w-full mt-40 mb-20 h-full flex flex-col justify-center items-center">
                 <Logo className="md:w-1/3 sm:w-1/2"/>
                 <SearchInput mutation={searchMutate}/>
             </div>
-            <Result ready={ready} result={result} />
+            <Result similarProjects={similarProjects} ready={ready} result={result} />
         </main>
     )
 }

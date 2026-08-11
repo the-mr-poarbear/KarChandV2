@@ -7,13 +7,15 @@ import { ProjectSettingsState, TaxonomyConfig } from "@/interfaces/taxonomy";
 import { useEffect, useState } from "react";
 import taxonomy from "@/data/taxonomy/taxonomy.json";
 import { buildInitialSettings } from "../Taxonomy/TaxonomyInit";
+import { SimilarProject } from "@/interfaces/similarProjects";
 
 
 interface Props{
     ready:boolean;
     result: ProjectPrediction|undefined
+    similarProjects:SimilarProject[]
 }
-const Result = ({ready,result}:Props) => {
+const Result = ({ready,result ,similarProjects}:Props) => {
     const [settings, setSettings] = useState<ProjectSettingsState | null>(null);
 
     useEffect(()=>{
@@ -51,7 +53,7 @@ const Result = ({ready,result}:Props) => {
 
                 <div className="border-2 border-border bg-white space-y-3 rounded-xl p-8">
                     <h2>پروژه های مشابه</h2>
-                    {result?.similarProjects.map((project)=>
+                    {similarProjects?.map((project)=>
                         <SimilarProjectCard project={project} key={project.id} />
                     )}
                 </div>

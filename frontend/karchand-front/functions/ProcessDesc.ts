@@ -4,46 +4,71 @@ import { postFetch, updateFetch } from "@/lib/fetch";
 import { toast } from "sonner";
 
 
-const mock:ProjectPrediction = {
-    estimated_price_tomans: 255000000,
-    reasoning: "The requested application requires extensive frontend architecture, including state management, custom routing, and external API integrations. The need for real-time updates and complex user authorization significantly increases the base scope.",
-    suggested_settings: {
-      features: ["Authentication", "Dashboard", "Settings & Configuration", "External API Integration", "Real-time Updates"],
-      enum_modifiers:{"project_type":"new"},
-      boolean_modifiers: ["web", "real_time"],
-      application_types: ["web_application", "api_backend"],
-      technology_modifiers: ["Custom Development"]
-    },
-    similarProjects: [
-        {
-        id: "proj_1a",
-        title: "React Frontend Project",
-        date: "2026/02/03",
-        description: "A comprehensive web interface built with modern component libraries. The system required custom hooks for data fetching and a highly modular architecture for future scaling.",
-        timeline_days: 30,
-        actual_price_tomans: 1000000,
-        converted_price_tomans: 1905000
-        },
-        {
-        id: "proj_2b",
-        title: "NILI Internal Dashboard",
-        date: "2026/01/15",
-        description: "An administrative panel designed to manage user permissions and visualize activity metrics. Included complex data grids and chart integrations.",
-        timeline_days: 45,
-        actual_price_tomans: 2200000,
-        converted_price_tomans: 3100000,
-        graph_nodes: 450 
-        }
-    ]
-}
+// const mock:ProjectPrediction = {
+//     estimated_price_tomans: 255000000,
+
+//   "reasoning": "The project is a small WordPress website for a cafe/restaurant with 2-5 pages. It requires a blog, SEO, SSL, Google Maps integration, and a CMS (provided by WordPress). As it uses a ready-made WordPress template, most features like Content Management are pre-installed. The core work involves setup, SEO, and adding a blog/map.",
+//   "suggested_settings": {
+//     "features": [
+//       "SEO",
+//       "Map & Geolocation Integration"
+//     ],
+//     "boolean_modifiers": [
+//       "web"
+//     ],
+//     "application_types": [
+//       "website"
+//     ],
+//     "technology_modifiers": [
+//       "WordPress"
+//     ],
+//     "enum_modifiers": {
+//       "project_type": "new",
+//       "ai_level": "none",
+//       "business_logic": "low",
+//       "data_volume": "small",
+//       "integration_complexity": "low",
+//       "ui_complexity": "low",
+//       "algorithmic_complexity": "low"
+//     },
+//     "numeric_modifiers": {
+//       "external_api_count": 1,
+//       "estimated_screens": 5,
+//       "estimated_entities": 1
+//     }
+//   },
+
+//     // similarProjects: [
+//     //     {
+//     //     id: "proj_1a",
+//     //     title: "React Frontend Project",
+//     //     date: "2026/02/03",
+//     //     description: "A comprehensive web interface built with modern component libraries. The system required custom hooks for data fetching and a highly modular architecture for future scaling.",
+//     //     timeline_days: 30,
+//     //     actual_price_tomans: 1000000,
+//     //     converted_price_tomans: 1905000,
+//     //     project_link:"sth"
+//     //     },
+//     //     {
+//     //     id: "proj_2b",
+//     //     title: "NILI Internal Dashboard",
+//     //     date: "2026/01/15",
+//     //     description: "An administrative panel designed to manage user permissions and visualize activity metrics. Included complex data grids and chart integrations.",
+//     //     timeline_days: 45,
+//     //     actual_price_tomans: 2200000,
+//     //     converted_price_tomans: 3100000,
+//     //     project_link:"sth"
+//     //     }
+//     // ]
+// }
 
 
 export async function ProcessDesc(prompt: string) {
-    return mock
+
     const result = await postFetch(
-        APIURL + "process_page",
+        APIURL + "extract_taxonomy",
         JSON.stringify({
-        prompt,
+        "query":prompt
         })
     );
 
@@ -52,8 +77,7 @@ export async function ProcessDesc(prompt: string) {
     const jsonResult = await result.json();
 
     if (result.ok) {
-        toast.success("ورود با موفقیت انجام شد", {
-        description: "شما با موفقیت به سیستم وارد شدید",
+        toast.success("نتایج شما آماده است", {
         });
         return jsonResult;
     } else {
@@ -62,23 +86,23 @@ export async function ProcessDesc(prompt: string) {
         case 400:
             toast.error("خطای درخواست", {
             description:
-                jsonResult.message || "نام کاربری یا رمز عبور نامعتبر است.",
+                jsonResult.message || "مقدار ورودی نامعتبر است.",
             });
             break;
         case 401:
             toast.error("عدم احراز هویت", {
-            description: "نام کاربری یا رمز عبور اشتباه است.",
+            description: "مقدار ورودی اشتباه است.",
             });
             break;
         case 403:
-            toast.error("نام کاربری یا رمز عبور اشتباه است", {
-            description: "لطفاً اطلاعات ورود خود را بررسی کنید",
+            toast.error("مقدار ورودی اشتباه است", {
+            description: "لطفاً اطلاعات ورودی خود را بررسی کنید",
             });
             break;
 
         case 404:
-            toast.error("کاربر یافت نشد", {
-            description: "کاربری با این مشخصات وجود ندارد.",
+            toast.error("api یافت نشد", {
+            description: "apiی با این مشخصات وجود ندارد.",
             });
             break;
         case 409:
