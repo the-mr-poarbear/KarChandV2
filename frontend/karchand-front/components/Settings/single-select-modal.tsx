@@ -17,7 +17,7 @@ interface SingleSelectModalProps {
   onOpenChange: (open: boolean) => void;
   title: string;
   options: string[];
-  selected: string;
+  selected: string | undefined;
   onApply: (next: string) => void;
 }
 
@@ -62,7 +62,7 @@ export function SingleSelectModal({
           </Button>
           <Button
             onClick={() => {
-              onApply(draft);
+              onApply(draft ?? "");
               onOpenChange(false);
             }}
           >

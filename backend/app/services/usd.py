@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session
 
 from app.crud import usd as crud_usd
 from app.schemas.usd import USDCreate
+from datetime import date
+from app.models.usd import USD
 
 URL = (
     "https://api.tgju.org/v1/market/indicator/summary-table-data/"
@@ -56,3 +58,13 @@ def sync_usd_history(
         "count": inserted,
         "start": start,
     }
+
+def get_current_usd_rate(db: Session) -> float | None:
+    usd = (
+        db.query(USD)
+        .filter(USD.date <= date.today())
+        .order_by(USD.date.desc())
+        .first()
+    )
+
+    return usd.close if usd else None

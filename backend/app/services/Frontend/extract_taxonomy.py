@@ -29,13 +29,15 @@ from app.core.config import settings
 
 from app.services.Frontend.price_estimator import estimate_price
 
+from sqlalchemy.orm import Session
+
 router = APIRouter()
 
 # ---------------------------------------------------------------------------
 # Config
 # ---------------------------------------------------------------------------
 MAX_RETRIES = 3
-MODEL = "z-ai/glm-5.2"
+MODEL = settings.LLM_MODEL
 TAXONOMY_PATH = Path(__file__).parent.parent.parent / "taxonomy/taxonomy.json"
 
 client = OpenAI(base_url=settings.LLM_BASE_URL, api_key=settings.LLM_API_KEY)
@@ -259,7 +261,7 @@ def normalize_result(parsed: dict) -> dict:
 # ---------------------------------------------------------------------------
 # Public entry point
 # ---------------------------------------------------------------------------
-def Extract_Taxonomy(query: str) -> dict:
+def Extract_Taxonomy(query: str , db:Session) -> dict:
     """
     Takes the raw text of a single project and returns a dict matching:
 
@@ -287,6 +289,6 @@ def Extract_Taxonomy(query: str) -> dict:
         raise RuntimeError(f"Expected a JSON object, got {type(parsed)}")
 
     result = normalize_result(parsed)
-    result["estimated_price"] = estimate_price(result["suggested_settings"])
+    result["estimated_price"] = estimate_price(result["suggested_settings"],db=db)
     return result
 

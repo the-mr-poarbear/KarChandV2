@@ -64,7 +64,7 @@ from app.models.organization import Organization
 BATCH_SIZE = 5
 MAX_RETRIES = 3
 MIN_SECONDS_BETWEEN_CALLS = 6.5
-MODEL = "z-ai/glm-5.2"
+MODEL = settings.LLM_MODEL
 
 STATE_DIR = Path("tagging_state")
 PROGRESS_PATH = STATE_DIR / "progress.json"

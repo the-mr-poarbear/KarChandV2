@@ -7,6 +7,10 @@ from pathlib import Path
 from threading import Lock
 from typing import Optional
 
+from sqlalchemy.orm import Session
+
+from app.services.usd import get_current_usd_rate
+
 import pandas as pd
 
 DATASET_PATH = Path(__file__).parent.parent.parent.parent / "ml_dataset" / "full_dataset.csv"
@@ -115,41 +119,116 @@ def _score_row(row: pd.Series, taxonomy: dict) -> float:
     return score
 
 
+from dataclasses import dataclass
+
+@dataclass
+class SimilarProject:
+    final_budget: float
+    final_budget_usd: float
+    usd_rate: float
+
+    min_budget: float
+    max_budget: float
+    min_budget_usd: float
+    max_budget_usd: float
+
+    organization: str
+    outer_link: str
+    scraped_project_id: str
+
+    project_id: str
+    title: str
+    scraped_date_created: str
+    description: str
+    duration_days: float
+
+
+def _to_similar_project_result(
+    row: SimilarProject,
+) -> dict:
+
+    result = {}
+
+    actual_price_tomans = row.final_budget
+
+    converted_price_tomans = (
+        row.final_budget_usd * float(row.usd_rate)
+        if row.final_budget_usd and row.usd_rate
+        else actual_price_tomans
+    )
+
+    converted_min_budget_tomans = (
+        row.min_budget_usd * float(row.usd_rate)
+        if row.min_budget_usd and row.usd_rate
+        else row.min_budget
+    )
+
+    converted_max_budget_tomans = (
+        row.max_budget_usd * float(row.usd_rate)
+        if row.max_budget_usd and row.usd_rate
+        else row.max_budget
+    )
+
+    project_link = ""
+
+    if row.organization == "Karlancer":
+        project_link = (
+            "https://www.karlancer.com/projects/"
+            + str(row.outer_link)
+        )
+
+    elif row.organization == "Ponisha":
+        project_link = (
+            "https://ponisha.ir/project/"
+            + str(row.scraped_project_id)
+        )
+
+    result = {
+        "id": str(row.project_id),
+        "title": str(row.title),
+        "date": str(row.scraped_date_created),
+        "description": str(row.description),
+        "timeline_days": int(row.duration_days or 0),
+
+        "actual_price_tomans": actual_price_tomans,
+        "converted_price_tomans": converted_price_tomans,
+
+        "min_budget": row.min_budget,
+        "max_budget": row.max_budget,
+
+        "converted_min_budget_tomans": converted_min_budget_tomans,
+        "converted_max_budget_tomans": converted_max_budget_tomans,
+
+        "project_link": project_link,
+    }
+
+    return result
+    
+
 # ---------------------------------------------------------------------------
 # Row -> SimilarProject mapping
 # ---------------------------------------------------------------------------
-def _to_similar_project(row: pd.Series) -> dict:
-    final_budget = _num(row.get("final_budget"))
-    final_budget_usd = _num(row.get("final_budget_usd"))
-    usd_rate = _num(row.get("usd_rate"))
+def _to_similar_project(row: pd.Series, db: Session) -> dict:
+    project = SimilarProject(
+        final_budget=_num(row.get("final_budget")),
+        final_budget_usd=_num(row.get("final_budget_usd")),
+        usd_rate=get_current_usd_rate(db),
 
-    # actual_price_tomans: the project's own budget as scraped (native currency).
-    actual_price_tomans = final_budget
+        min_budget=_num(row.get("budget_min")),
+        max_budget=_num(row.get("budget_max")),
+        min_budget_usd=_num(row.get("budget_min_usd")),
+        max_budget_usd=_num(row.get("budget_max_usd")),
 
-    # converted_price_tomans: the USD-normalized budget converted back to
-    # tomans via that project's recorded usd_rate, so projects from
-    # different platforms/currencies land on one comparable scale.
-    # Falls back to the raw budget if either input is missing.
-    converted_price_tomans = (
-        final_budget_usd * usd_rate if final_budget_usd and usd_rate else actual_price_tomans
+        organization=row.get("organization", ""),
     )
 
-    return {
-        "id": str(row.get("project_id", "")),
-        "title": str(row.get("title", "")),
-        "date": str(row.get("created_at", "")),
-        "description": str(row.get("description", "")),
-        "timeline_days": int(_num(row.get("duration_days"))),
-        "actual_price_tomans": actual_price_tomans,
-        "converted_price_tomans": converted_price_tomans,
-        "project_link": str(row.get("outer_link", "")),
-    }
+    return _to_similar_project_result(project)
 
 
 # ---------------------------------------------------------------------------
 # Public entry point
 # ---------------------------------------------------------------------------
-def find_similar_projects(taxonomy: dict, top_n: int = 10) -> list[dict]:
+def find_similar_projects(taxonomy: dict, db:Session , top_n: int = 10 , sendRaw = False) -> list[dict]:
     df = _load_dataset()
     if df.empty:
         return []
@@ -158,4 +237,7 @@ def find_similar_projects(taxonomy: dict, top_n: int = 10) -> list[dict]:
     ranked = df.assign(_match_score=scores).sort_values("_match_score", ascending=False)
     top = ranked.head(top_n)
 
-    return [_to_similar_project(row) for _, row in top.iterrows()]
+    if sendRaw:
+        return top.to_dict(orient="records")
+
+    return [_to_similar_project(row , db) for _, row in top.iterrows()]

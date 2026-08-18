@@ -6,6 +6,8 @@ from threading import Lock
 import numpy as np
 import pandas as pd
 from catboost import CatBoostRegressor
+from sqlalchemy.orm import Session
+from app.services.usd import get_current_usd_rate
 
 MODEL_DIR = Path(__file__).parent.parent.parent
 MODEL_PATH = MODEL_DIR / "catboost_price_model.cbm"
@@ -77,8 +79,9 @@ def _build_feature_row(taxonomy: dict, schema: dict, duration_days: float = 30) 
     return pd.DataFrame([row], columns=columns)
 
 
-def estimate_price(taxonomy: dict, duration_days: float = 30) -> float:
+def estimate_price(taxonomy: dict, db:Session , duration_days: float = 30 ,) -> float:
     model, schema = _load()
     X = _build_feature_row(taxonomy, schema, duration_days=duration_days)
     pred_log = model.predict(X)[0]
-    return float(np.expm1(pred_log)) if schema.get("target_transform") == "log1p" else float(pred_log)
+    usd_rate = get_current_usd_rate(db)
+    return float(np.expm1(pred_log) * float(usd_rate)) if schema.get("target_transform") == "log1p" else float(pred_log)

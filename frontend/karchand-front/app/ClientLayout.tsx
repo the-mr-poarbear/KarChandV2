@@ -19,7 +19,7 @@ const ClientLayout = ({ children }: ClientLayoutProps) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <body className="min-h-full flex flex-col px-10">
+      <body className="min-h-full flex flex-col sm:px-10 px-2">
         <Navbar />
         {children}
       </body>

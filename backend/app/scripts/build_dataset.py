@@ -41,6 +41,7 @@ def fetch_project_details(engine) -> pd.DataFrame:
     query = text("""
         SELECT
             p.id::text                          AS project_id,
+            p.scraped_project_id,
             p.title,
             p.description,
             p.outer_link,
@@ -285,7 +286,7 @@ def build_dataset(tagged_csv: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
     # ── Column ordering ────────────────────────────────────────────────────
     # Put the most important/interpretable columns first
     front_cols = [
-        'project_id', 'title', 'category', 'organization','outer_link',
+        'project_id','scraped_project_id', 'title', 'category', 'organization','outer_link',
         'created_at', 'scraped_date_created',
         'usd_rate', 'usd_rate_date',
         'final_budget', 'log_final_budget',

@@ -21,5 +21,8 @@ sentence-transformers>=5.1
 transformers>=4.57
 accelerate>=1.10
 
+qdrant-client
+tqdm
+
 # Install PyTorch separately (CPU or CUDA build)
 # See https://pytorch.org/get-started/locally/

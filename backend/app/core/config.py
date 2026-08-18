@@ -18,6 +18,8 @@ class Settings(BaseSettings):
     LLM_API_KEY_3:str
     LLM_API_KEY_4:str
     NAVAVSAAN_API_KEY:str
+
+    LLM_MODEL:str = "z-ai/glm-5.2"
     
     # Optional with default
     DATABASE_URL: str = "sqlite:///./app.db"
@@ -29,6 +31,12 @@ class Settings(BaseSettings):
     # Scraper-specific settings
     SCRAPER_HEADLESS: bool = True
     SCRAPER_TIMEOUT: int = 30000
+
+    QDRANT_URL:str = "http://localhost:6333"
+    QDRANT_COLLECTION: str = "freelance_projects"
+    EMBEDDING_MODEL:str = "intfloat/multilingual-e5-small"
+    USE_E5_PREFIXES:bool = True
+    
 
     
     class Config:

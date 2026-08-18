@@ -3,7 +3,7 @@ ML DATASET BUILD REPORT
 ============================================================
 Total rows (full dataset)  : 19,668
 Training rows (has budget) : 13,194 (67.1%)
-Columns                    : 164
+Columns                    : 165
 
 --- USD rate coverage ---
 Projects with a usable USD rate: 19,668 (100.0%)

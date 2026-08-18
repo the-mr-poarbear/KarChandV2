@@ -18,6 +18,7 @@ interface MultiSelectModalProps {
   options: string[];
   selected: string[];
   onApply: (next: string[]) => void;
+  wide?:boolean
 }
 
 export function MultiSelectModal({
@@ -27,6 +28,7 @@ export function MultiSelectModal({
   options,
   selected,
   onApply,
+  wide=false
 }: MultiSelectModalProps) {
   const [draft, setDraft] = useState<string[]>(selected);
 
@@ -42,21 +44,24 @@ export function MultiSelectModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className={`w-full ${wide?"md:max-w-10/11 sm:max-w-10/11":""} `}>
         <DialogHeader>
           <DialogTitle className="text-sky-500">{title}</DialogTitle>
         </DialogHeader>
 
-        <div className="flex flex-wrap gap-2 py-2">
-          {options.map((opt) => (
-            <FeaturePill
-              key={opt}
-              label={opt}
-              checked={draft.includes(opt)}
-              onToggle={() => toggle(opt)}
-            />
-          ))}
+        <div className="max-h-100 overflow-auto">
+          <div className="flex flex-wrap gap-2 py-2 overflow-auto">
+            {options.map((opt) => (
+              <FeaturePill
+                key={opt}
+                label={opt}
+                checked={draft.includes(opt)}
+                onToggle={() => toggle(opt)}
+              />
+            ))}
+          </div>
         </div>
+
 
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>

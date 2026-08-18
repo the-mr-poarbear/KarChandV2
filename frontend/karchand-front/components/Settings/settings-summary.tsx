@@ -34,7 +34,7 @@ function SummaryTile({
   return (
     <Card
       onClick={onClick}
-      className="cursor-pointer px-4 py-3 text-center transition-colors hover:bg-accent/40"
+      className="cursor-pointer px-4 py-3  gap-2 text-center transition-colors hover:bg-accent/40"
     >
       <p className="text-sm text-muted-foreground">{label}</p>
       <p className="font-medium capitalize">{value}</p>
@@ -59,7 +59,7 @@ export function SettingsSummary({ taxonomy, settings, onChange }: SettingsSummar
         />
         <SummaryTile
           label="Project Type"
-          value={settings?.enum_modifiers.project_type?.replace(/_/g, " ") ?? "—"}
+          value={settings?.enum_modifiers?.project_type?.replace(/_/g, " ") ?? "—"}
           onClick={() => setOpenModal("project_type")}
         />
         <SummaryTile
@@ -88,6 +88,7 @@ export function SettingsSummary({ taxonomy, settings, onChange }: SettingsSummar
         open={openModal === "features"}
         onOpenChange={(o) => setOpenModal(o ? "features" : null)}
         title="Features"
+        wide
         options={taxonomy.features.values}
         selected={settings?.features}
         onApply={(next) => onChange({ ...settings, features: next })}
@@ -125,7 +126,7 @@ export function SettingsSummary({ taxonomy, settings, onChange }: SettingsSummar
         onOpenChange={(o) => setOpenModal(o ? "project_type" : null)}
         title="Project Type"
         options={taxonomy.enum_modifiers.fields.project_type.values}
-        selected={settings?.enum_modifiers.project_type}
+        selected={settings?.enum_modifiers?.project_type}
         onApply={(next) =>
           onChange({
             ...settings,

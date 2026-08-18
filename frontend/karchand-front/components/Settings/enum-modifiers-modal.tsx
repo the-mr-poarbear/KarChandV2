@@ -16,7 +16,7 @@ interface EnumModifiersModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   fields: Record<string, { values: string[]; description: string }>;
-  selected: Record<string, string>;
+  selected: Record<string, string> | undefined;
   onApply: (next: Record<string, string>) => void;
   /** field keys to skip, e.g. ["project_type"] if it has its own tile */
   exclude?: string[];
@@ -30,23 +30,23 @@ export function EnumModifiersModal({
   onApply,
   exclude = [],
 }: EnumModifiersModalProps) {
-  const [draft, setDraft] = useState<Record<string, string>>(selected);
+  const [draft, setDraft] = useState<Record<string, string> | undefined>(selected);
 
   useEffect(() => {
-    if (open) setDraft(selected);
+    if (open && selected) setDraft(selected);
   }, [open, selected]);
 
   const entries = Object.entries(fields).filter(([key]) => !exclude.includes(key));
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-xl max-h-[80vh] overflow-y-auto">
+      <DialogContent className="max-w-xl max-h-[80vh] overflow-y-auto overflow-x-hidden">
         <DialogHeader>
           <DialogTitle className="text-sky-500">Enum Modifiers</DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-5 py-2">
-          {entries.map(([key, field]) => (
+        <div className="space-y-5 py-2 max-h-100 overflow-y-auto ">
+          {draft && entries.map(([key, field]) => (
             <div key={key}>
               <p className="mb-2 text-sm font-medium capitalize">
                 {key.replace(/_/g, " ")}
@@ -81,8 +81,10 @@ export function EnumModifiersModal({
           </Button>
           <Button
             onClick={() => {
-              onApply(draft);
-              onOpenChange(false);
+              if(draft){
+                onApply(draft);
+                onOpenChange(false);
+              }
             }}
           >
             Apply
