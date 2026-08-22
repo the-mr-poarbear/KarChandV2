@@ -2,46 +2,26 @@
   {
     "project_id": "b31e23e5-c7ad-4e4f-a883-31ff61301fa2",
     "features": {
-      "User Management": 1,
-      "Content Management": 2,
-      "Import & Export": 4,
-      "Order Management": 3,
-      "Product Catalog": 1,
-      "External API Integration": 1
+      "User Management": 1, "Content Management": 2,"Import & Export": 4,
+      "Order Management": 3,"Product Catalog": 1,"External API Integration": 1
     },
-    "application_type": {
-      "web_application": 1,
-      "ecommerce": 1
-    },
+    "application_type": { "web_application": 1, "ecommerce": 1},
     "technology_modifiers": {
-      "WordPress": 1,
-      "WooCommerce": 1,
-      "Custom Development": 1
+      "WordPress": 1, "WooCommerce": 1, "Custom Development": 1
     },
     "numeric_modifiers": {
-      "external_api_count": 0,
-      "estimated_screens": 3,
-      "estimated_entities": 3
+      "external_api_count": 0, "estimated_screens": 3, "estimated_entities": 3
     },
     "boolean_modifiers": {
-      "real_time": 0,
-      "mobile": 0,
-      "web": 1,
-      "offline": 0,
-      "legacy_system": 0,
-      "existing_codebase": 1,
-      "requires_refactoring": 0,
-      "requires_reverse_engineering": 0,
-      "cross_platform": 0
+      "real_time": 0,  "mobile": 0, "web": 1,
+      "offline": 0, "legacy_system": 0,  "existing_codebase": 1,  "requires_refactoring": 0,
+      "requires_reverse_engineering": 0,  "cross_platform": 0
     },
     "enum_modifiers": {
       "project_type": "new",
-      "ai_level": "none",
-      "business_logic": "medium",
-      "data_volume": "small",
-      "integration_complexity": "low",
-      "ui_complexity": "low",
-      "algorithmic_complexity": "low"
+      "ai_level": "none", "business_logic": "medium",
+      "data_volume": "small",  "integration_complexity": "low",
+      "ui_complexity": "low", "algorithmic_complexity": "low"
     }
   }
 ]

@@ -193,7 +193,7 @@ const mock: ProjectPrediction ={
 
 export async function ProcessDescMixed(prompt: string) : Promise<ProjectPrediction> {
 
-    // return mock;
+    return mock;
 
     const result = await postFetch(
         APIURL + "mixed",

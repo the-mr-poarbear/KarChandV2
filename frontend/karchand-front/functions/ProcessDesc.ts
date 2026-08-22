@@ -8,7 +8,7 @@ const mock: ProjectPrediction = {"reasoning":"این پروژه یک پلتفر�
 
 export async function ProcessDescML(prompt: string) : Promise<ProjectPrediction> {
 
-    // return mock;
+    return mock;
 
     const result = await postFetch(
         APIURL + "extract_taxonomy_ml",

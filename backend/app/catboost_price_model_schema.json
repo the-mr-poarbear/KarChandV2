@@ -87,9 +87,6 @@
     "WooCommerce",
     "Joomla",
     "Custom Development",
-    "external_api_count",
-    "estimated_screens",
-    "estimated_entities",
     "real_time",
     "mobile",
     "web",
@@ -99,6 +96,12 @@
     "requires_refactoring",
     "requires_reverse_engineering",
     "cross_platform",
+    "ai_level",
+    "business_logic",
+    "data_volume",
+    "integration_complexity",
+    "ui_complexity",
+    "algorithmic_complexity",
     "feature_count",
     "project_type_bugfix",
     "project_type_consulting",
@@ -109,8 +112,46 @@
     "project_type_testing"
   ],
   "target_transform": "log1p",
-  "ordinal_cols": [],
-  "enum_order": {},
+  "ordinal_cols": [
+    "ai_level",
+    "business_logic",
+    "data_volume",
+    "integration_complexity",
+    "ui_complexity",
+    "algorithmic_complexity"
+  ],
+  "enum_order": {
+    "ai_level": [
+      "none",
+      "basic",
+      "advanced"
+    ],
+    "business_logic": [
+      "low",
+      "medium",
+      "high"
+    ],
+    "data_volume": [
+      "small",
+      "medium",
+      "large"
+    ],
+    "integration_complexity": [
+      "low",
+      "medium",
+      "high"
+    ],
+    "ui_complexity": [
+      "low",
+      "medium",
+      "high"
+    ],
+    "algorithmic_complexity": [
+      "low",
+      "medium",
+      "high"
+    ]
+  },
   "project_type_prefix": "project_type_",
   "project_type_dummy_cols": [
     "project_type_bugfix",

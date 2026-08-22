@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     LLM_API_KEY_4:str
     NAVAVSAAN_API_KEY:str
 
-    LLM_MODEL:str = "z-ai/glm-5.2"
+    LLM_MODEL:str = "meta/muse-glimmer-30b"
     
     # Optional with default
     DATABASE_URL: str = "sqlite:///./app.db"

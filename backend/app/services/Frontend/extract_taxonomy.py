@@ -192,6 +192,11 @@ def call_llm(project_text: str) -> str:
                     {"role": "user", "content": f"Project description:\n\n{project_text}"},
                 ],
             )
+            print("RESPONSE")
+            print(response)
+            print(response.choices)
+            print(response.choices[0])
+
             return response.choices[0].message.content or ""
         except Exception as e:
             last_error = e
