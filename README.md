@@ -27,7 +27,7 @@ Estimating the cost of freelance software projects is challenging. Every project
 
 By combining a custom dataset, LLM-powered feature extraction, and multiple estimation strategies, Karchand provides a practical way to explore how AI and data-driven methods can support freelance project pricing.
 
-## About the Project
+## About Me
 
 I'm Arsam, a Computer Engineering student and the creator of Karchand. With a background in frontend development, I gradually shifted my focus toward Data Engineering, Machine Learning, and Retrieval-Augmented Generation (RAG).
 
