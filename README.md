@@ -142,7 +142,7 @@ After processing, the system displays the estimation results through three main 
 
 ## Author
 
-**Arsam Amir Soleimani**
+**Arsam Amirsoleimani**
 
 Computer Engineering student focused on Data Engineering, Machine Learning, and AI-powered applications.
 
