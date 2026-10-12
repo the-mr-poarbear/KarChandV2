@@ -3,13 +3,13 @@
   <a href="./README.fa.md">فارسی</a>
 </p>
 
-<h1 align="center">Karchand</h1>
+<h1 align="">Karchand</h1>
 
-<p align="center">
+<p align="">
   <i>Describe your software project. Get an estimated price in Iranian tomans.</i>
 </p>
 
-<p align="center">
+<p align="">
   A freelance software project cost estimation system powered by Machine Learning, semantic search, and feature-based retrieval.
 </p>
 
