@@ -1,4 +1,9 @@
-# Karchand
+<p align="right">
+  <a href="./README.md">English</a> |
+  <a href="./README.fa.md">فارسی</a>
+</p>
+
+<h1 align="center">Karchand</h1>
 
 <p align="center">
   <i>Describe your software project. Get an estimated price in Iranian tomans.</i>
